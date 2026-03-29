@@ -4,8 +4,6 @@
  * Real missions are created via POST /api/missions.
  */
 
-export const SEED_MISSION_PREFIX = 'mission_';
-
 export const SEED_MISSIONS = [
   {
     id: 'mission_evaluate-new-projects',

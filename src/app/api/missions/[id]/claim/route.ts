@@ -51,6 +51,8 @@ export async function POST(req: NextRequest, { params }: { params: Promise<{ id:
       }
     }
 
+    const body = await req.json().catch(() => ({}));
+
     const headers: Record<string, string> = {
       'Content-Type': 'application/json',
       Authorization: auth,
@@ -60,6 +62,7 @@ export async function POST(req: NextRequest, { params }: { params: Promise<{ id:
     const res = await fetch(`${BACKEND}/missions/${id}/claim`, {
       method: 'POST',
       headers,
+      body: JSON.stringify(body),
     });
     const data = await res.json();
     return NextResponse.json(data, { status: res.status, headers: AGENT_CORS_HEADERS });
