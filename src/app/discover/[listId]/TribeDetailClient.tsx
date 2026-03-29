@@ -242,10 +242,18 @@ export default function TribeDetailClient({ tribeId }: TribeDetailClientProps) {
               {buildCopied ? '✓ Copied!' : 'Copy'}
             </button>
           </div>
-          <div style={{ display: 'flex', gap: 16, justifyContent: 'center' }}>
+          <div style={{ display: 'flex', gap: 16, justifyContent: 'center', alignItems: 'center' }}>
             <span style={{ fontFamily: 'var(--font-dm-sans), sans-serif', fontSize: 12, color: C.textDim }}>
               Your agent will guide you: <strong>🚀 Project</strong> or <strong>🛠 Skill</strong>
             </span>
+            <a
+              href="https://github.com/bloomprotocol/bloom-tribe-skill"
+              target="_blank"
+              rel="noopener noreferrer"
+              style={{ fontFamily: 'var(--font-jetbrains-mono), monospace', fontSize: 11, color: '#999', textDecoration: 'none' }}
+            >
+              GitHub →
+            </a>
           </div>
         </div>
       )}
