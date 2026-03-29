@@ -1,0 +1,264 @@
+/* Container and Background */
+.container {
+  position: relative;
+  z-index: 1;
+  display: flex;
+  flex-direction: column;
+  padding: 0 20px 20px;
+  max-width: 600px;
+  margin: 0 auto;
+  color: #ffffff;
+}
+
+/* Inventory Grid */
+.inventoryGrid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 15px;
+}
+
+.inventorySlot {
+  aspect-ratio: 1;
+  background: rgba(255, 255, 255, 0.03);
+  border: 2px dashed rgba(255, 255, 255, 0.1);
+  border-radius: 20px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  position: relative;
+  overflow: hidden;
+}
+
+.inventorySlot.equipped {
+  background: rgba(255, 255, 255, 0.05);
+  border: 2px solid var(--item-color);
+  animation: equipGlow 2s ease-in-out infinite;
+}
+
+@keyframes equipGlow {
+  0%,
+  100% {
+    box-shadow: 0 0 20px rgba(255, 255, 255, 0.1);
+  }
+  50% {
+    box-shadow: 0 0 30px var(--item-color);
+  }
+}
+
+.inventorySlot.comingSoon {
+  background: rgba(255, 255, 255, 0.02);
+  border: 2px solid rgba(255, 255, 255, 0.05);
+  cursor: default;
+}
+
+.inventorySlot.locked {
+  background: rgba(0, 0, 0, 0.5);
+  border-color: rgba(255, 255, 255, 0.05);
+  cursor: not-allowed;
+}
+
+.inventorySlot:not(.locked):not(.comingSoon):active {
+  transform: scale(0.95);
+}
+
+/* Item Icons */
+.itemIcon {
+  font-size: 40px;
+  margin-bottom: 8px;
+  filter: drop-shadow(0 0 10px var(--item-color));
+  animation: itemFloat 3s ease-in-out infinite;
+  animation-delay: var(--animation-delay);
+}
+
+@keyframes itemFloat {
+  0%,
+  100% {
+    transform: translateY(0);
+  }
+  50% {
+    transform: translateY(-5px);
+  }
+}
+
+.itemName {
+  font-size: 12px;
+  font-weight: 600;
+  text-align: center;
+}
+
+.itemPower {
+  font-size: 10px;
+  color: var(--item-color);
+  margin-top: 3px;
+}
+
+/* Slot specific colors */
+.spark {
+  --item-color: #ff1493;
+}
+.fund {
+  --item-color: #00ff88;
+}
+.boost {
+  --item-color: #ba55d3;
+}
+
+/* Coming Soon State */
+.loadingShimmer {
+  position: absolute;
+  top: -50%;
+  left: -50%;
+  width: 200%;
+  height: 200%;
+  background: linear-gradient(
+    90deg,
+    transparent 0%,
+    rgba(255, 255, 255, 0.1) 50%,
+    transparent 100%
+  );
+  animation: shimmer 2s infinite;
+}
+
+@keyframes shimmer {
+  from {
+    transform: translateX(-100%);
+  }
+  to {
+    transform: translateX(100%);
+  }
+}
+
+.comingSoonIcon {
+  font-size: 30px;
+  margin-bottom: 8px;
+  opacity: 0.3;
+  filter: grayscale(1);
+}
+
+.comingSoonLabel {
+  font-size: 10px;
+  color: #666;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  margin-bottom: 5px;
+}
+
+.countdownTimer {
+  font-size: 14px;
+  font-weight: 600;
+  color: #ffd700;
+  animation: pulse 2s ease-in-out infinite;
+}
+
+@keyframes pulse {
+  0%,
+  100% {
+    opacity: 0.8;
+  }
+  50% {
+    opacity: 1;
+  }
+}
+
+.teaserText {
+  font-size: 9px;
+  color: #888;
+  margin-top: 5px;
+  text-align: center;
+  padding: 0 10px;
+}
+
+/* Lock State */
+.lockIcon {
+  font-size: 30px;
+  color: #444;
+}
+
+.unlockLevel {
+  font-size: 10px;
+  color: #666;
+  margin-top: 5px;
+}
+
+/* Notification Badge */
+.notificationBadge {
+  position: absolute;
+  top: -5px;
+  right: -5px;
+  background: #ff1493;
+  color: white;
+  font-size: 10px;
+  font-weight: 700;
+  padding: 2px 6px;
+  border-radius: 10px;
+  animation: badgePulse 2s ease-in-out infinite;
+}
+
+@keyframes badgePulse {
+  0%,
+  100% {
+    transform: scale(1);
+  }
+  50% {
+    transform: scale(1.1);
+  }
+}
+
+/* Mobile Adjustments */
+@media (max-width: 1279px) {
+  .inventoryGrid {
+    gap: 10px;
+  }
+
+  .inventorySlot {
+    border-radius: 15px;
+  }
+
+  .itemIcon {
+    font-size: 32px;
+  }
+
+  .itemName {
+    font-size: 11px;
+  }
+}
+
+/* Magic Particles */
+.magicParticles {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+  z-index: -1;
+}
+
+.particle {
+  position: absolute;
+  width: 3px;
+  height: 3px;
+  background: var(--particle-color);
+  border-radius: 50%;
+  animation: floatParticle 10s linear infinite;
+}
+
+@keyframes floatParticle {
+  from {
+    transform: translateY(100vh);
+    opacity: 0;
+  }
+  10% {
+    opacity: 1;
+  }
+  90% {
+    opacity: 1;
+  }
+  to {
+    transform: translateY(-100px);
+    opacity: 0;
+  }
+}

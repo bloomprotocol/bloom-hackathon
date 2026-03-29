@@ -1,0 +1,62 @@
+@keyframes fadeOutIn {
+  0% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0;
+  }
+  100% {
+    opacity: 1;
+  }
+}
+
+@keyframes fadeInOut {
+  0% {
+    opacity: 0;
+  }
+  50% {
+    opacity: 1;
+  }
+  100% {
+    opacity: 0;
+  }
+}
+
+/* 背景作為絕對定位層 */
+.flashing-bg-absolute {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  z-index: -1;
+  pointer-events: none;
+  background-color: #fff5f0; /* 淡粉色背景作为底色 */
+}
+
+.flashing-bg-absolute::before,
+.flashing-bg-absolute::after {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-size: cover;
+  background-position: center top;
+  background-repeat: no-repeat;
+}
+
+.flashing-bg-absolute::before {
+  background-image: url("https://statics.bloomprotocol.ai/campaign/one/flashing-bg-1-small.png");
+  opacity: 1;
+  animation: fadeOutIn 2s ease-in-out infinite;
+}
+
+.flashing-bg-absolute::after {
+  background-image: url("https://statics.bloomprotocol.ai/campaign/one/flashing-bg-2-small.png");
+  opacity: 0;
+  animation: fadeInOut 2s ease-in-out infinite;
+}
+
+/* 內容層已由 Tailwind 類別處理 */

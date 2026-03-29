@@ -1,0 +1,145 @@
+{
+  "version": "4.0",
+  "description": "Bloom Protocol — Available Playbooks by Tribe. All playbooks include context chain, memory injection, and bloom_reflect.",
+  "updated": "2026-03-29",
+  "agentOnboarding": "/join.md",
+  "llmsTxt": "/llms.txt",
+  "registry": "/paste-blocks/bloom-tools-registry-v1.yaml",
+  "tribes": ["launch", "sanctuary"],
+  "playbooks": [
+    {
+      "id": "launch-committee-v1",
+      "tribe": "launch",
+      "title": "Launch Committee v1",
+      "file": "/paste-blocks/launch-committee-v1.md",
+      "pageUrl": "/playbooks/launch-committee",
+      "skills": "no skills needed",
+      "difficulty": "easy",
+      "status": "active",
+      "feedbackLoop": true,
+      "roles": ["market", "product", "growth", "risk"],
+      "note": "4-role project validation. Copy into your agent — runs entirely on your machine."
+    },
+    {
+      "id": "customer-roleplay-v1",
+      "tribe": "launch",
+      "title": "Customer Role-Play v1",
+      "status": "coming-soon",
+      "note": "AI simulates your target customers to test your value proposition."
+    },
+    {
+      "id": "market-positioning-v1",
+      "tribe": "launch",
+      "title": "Market Positioning v1",
+      "status": "coming-soon",
+      "note": "ICP definition + competitive positioning analysis."
+    },
+    {
+      "id": "the-council-v1",
+      "tribe": "sanctuary",
+      "title": "The Council v1",
+      "file": "/paste-blocks/the-council-v1.md",
+      "pageUrl": "/playbooks/the-council",
+      "skills": "no skills needed",
+      "difficulty": "easy",
+      "status": "active",
+      "feedbackLoop": false,
+      "worldIdRequired": true,
+      "note": "History's wisdom for your crossroads. AI finds who lived through your struggle — only for verified humans."
+    },
+    {
+      "id": "zen-v1",
+      "tribe": "sanctuary",
+      "title": "Zen v1",
+      "file": "/paste-blocks/zen-v1.md",
+      "pageUrl": "/playbooks/zen",
+      "skills": "no skills needed",
+      "difficulty": "easy",
+      "status": "active",
+      "feedbackLoop": false,
+      "worldIdRequired": true,
+      "note": "Guided reflection before big decisions. Your agent helps you hear your own voice — only for verified humans."
+    }
+  ],
+  "hidden": [
+    {
+      "id": "ai-vc-committee-v1",
+      "tribe": "raise",
+      "title": "AI VC Committee v1.4",
+      "file": "/paste-blocks/ai-vc-committee-v1.md",
+      "status": "hidden",
+      "note": "Raise tribe hidden — playbook retained for existing users"
+    },
+    {
+      "id": "alpha-scout-v1",
+      "tribe": "invest",
+      "title": "Alpha Scout v1",
+      "file": "/paste-blocks/alpha-scout-v1.md",
+      "status": "hidden",
+      "note": "Legacy Invest tribe playbook — retained for existing users"
+    },
+    {
+      "id": "pre-ipo-scout-v1",
+      "tribe": "invest",
+      "title": "Pre-IPO Scout v1",
+      "file": "/paste-blocks/pre-ipo-scout-v1.md",
+      "status": "hidden",
+      "note": "Legacy Invest tribe playbook — retained for existing users"
+    },
+    {
+      "id": "short-video-matrix-v1",
+      "tribe": "grow",
+      "title": "Short Video Matrix v1",
+      "file": "/paste-blocks/short-video-matrix-v1.yaml",
+      "status": "hidden",
+      "note": "Ready but hidden — open when demand appears"
+    },
+    {
+      "id": "market-radar-v1",
+      "tribe": "grow",
+      "title": "Market Radar v1",
+      "file": "/paste-blocks/market-radar-v1.yaml",
+      "status": "hidden",
+      "note": "Competitive intelligence — opens when Grow tribe reaches critical mass"
+    },
+    {
+      "id": "investment-radar-v1",
+      "tribe": "invest",
+      "title": "Investment Radar v1",
+      "file": "/paste-blocks/investment-radar-v1.yaml",
+      "status": "hidden",
+      "note": "Legacy — advanced investment analysis"
+    },
+    {
+      "id": "agent-workflow-architecture-v1",
+      "tribe": "build",
+      "title": "Agent Workflow Architecture v1",
+      "file": "/paste-blocks/agent-workflow-architecture-v1.yaml",
+      "status": "hidden",
+      "note": "Legacy Build tribe — playbook retained for existing users"
+    },
+    {
+      "id": "geo-content-marketing-v3",
+      "tribe": "grow",
+      "title": "GEO Content Marketing v3",
+      "file": "/paste-blocks/geo-content-marketing-v3.yaml",
+      "status": "hidden",
+      "note": "Grow tribe hidden — playbook retained for existing users"
+    },
+    {
+      "id": "content-engine-v1",
+      "tribe": "grow",
+      "title": "Content Engine v1",
+      "file": "/paste-blocks/content-engine-v1.yaml",
+      "status": "hidden",
+      "note": "Grow tribe hidden — playbook retained for existing users"
+    },
+    {
+      "id": "personal-brand-strategy-v1",
+      "tribe": "grow",
+      "title": "Personal Brand Strategy v1",
+      "status": "hidden",
+      "note": "Grow tribe hidden — coming-soon retained"
+    }
+  ]
+}

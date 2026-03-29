@@ -1,0 +1,449 @@
+<!DOCTYPE html>
+<html lang="en">
+<chead>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Generate Agent Identity Cards</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=DM+Serif+Text:ital@0;1&family=Hedvig+Letters+Serif:opsz@12..24&family=IBM+Plex+Mono:wght@300;400;500&display=swap" rel="stylesheet">
+
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: system-ui, -apple-system, sans-serif;
+            background: #f3f4f6;
+            padding: 40px 20px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 40px;
+        }
+
+        .header {
+            max-width: 600px;
+            padding: 20px;
+            background: white;
+            border-radius: 12px;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+            text-align: center;
+        }
+
+        .header h1 {
+            font-size: 24px;
+            margin-bottom: 8px;
+            color: #1e1b4b;
+        }
+
+        .instructions {
+            background: #dbeafe;
+            padding: 16px;
+            border-radius: 8px;
+            margin-top: 16px;
+            text-align: left;
+            font-size: 14px;
+            line-height: 1.6;
+        }
+
+        .instructions ol {
+            margin: 10px 0;
+            padding-left: 20px;
+        }
+
+        .card-label {
+            text-align: center;
+            margin-bottom: 20px;
+        }
+
+        .card-label h2 {
+            font-size: 20px;
+            color: #1e1b4b;
+            margin-bottom: 4px;
+        }
+
+        /* Agent Identity Card */
+        .agent-card {
+            position: relative;
+            width: 372px;
+            height: 520px;
+            border-radius: 20px;
+            padding: 16px;
+            overflow: hidden;
+            box-shadow: 0px 6px 10px -4px rgba(0,0,0,0.12), 0px 0px 0px 1px rgba(0,0,0,0.05);
+            backdrop-filter: blur(10px);
+        }
+
+        /* Background pattern/texture */
+        .agent-card::before {
+            content: '';
+            position: absolute;
+            inset: 0;
+            border-radius: 20px;
+            background-size: cover;
+            background-position: center;
+            background-image: inherit;
+            opacity: 0.5;
+            mix-blend-mode: overlay;
+            z-index: 0;
+            pointer-events: none;
+        }
+
+        /* Dark overlay */
+        .agent-card::after {
+            content: '';
+            position: absolute;
+            inset: 0;
+            border-radius: 20px;
+            background: rgba(0, 0, 0, 0.2);
+            z-index: 1;
+            pointer-events: none;
+        }
+
+        /* Gradient backgrounds */
+        .bg-visionary {
+            background: linear-gradient(to bottom right, #d8b4fe, #e9d5ff);
+        }
+
+        .bg-explorer {
+            background: linear-gradient(to bottom right, #86efac, #bbf7d0);
+        }
+
+        .bg-cultivator {
+            background: linear-gradient(to bottom right, #67e8f9, #a5f3fc);
+        }
+
+        .bg-optimizer {
+            background: linear-gradient(to bottom right, #fdba74, #fed7aa);
+        }
+
+        .bg-innovator {
+            background: linear-gradient(to bottom right, #93c5fd, #bfdbfe);
+        }
+
+        /* Hero image */
+        .card-hero {
+            position: relative;
+            z-index: 10;
+            width: 100%;
+            height: 185px;
+            margin-bottom: 16px;
+            border-radius: 20px;
+            overflow: hidden;
+            background: rgba(255, 255, 255, 0.3);
+        }
+
+        .card-hero img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        /* Content */
+        .card-content {
+            position: relative;
+            z-index: 10;
+        }
+
+        .personality-name {
+            font-family: 'DM Serif Text', serif;
+            font-size: 22px;
+            color: white;
+            margin-bottom: 8px;
+            line-height: normal;
+        }
+
+        .personality-quote {
+            font-family: 'Hedvig Letters Serif', serif;
+            font-size: 18px;
+            color: white;
+            opacity: 0.9;
+            margin-bottom: 16px;
+            line-height: normal;
+            font-style: italic;
+        }
+
+        .personality-description {
+            font-family: 'IBM Plex Mono', monospace;
+            font-weight: 300;
+            font-size: 14px;
+            color: white;
+            opacity: 0.9;
+            margin-bottom: 24px;
+            line-height: 1.625;
+        }
+
+        .openclaw-badge {
+            margin-bottom: 8px;
+            padding-top: 8px;
+            border-top: 1px solid rgba(255, 255, 255, 0.2);
+        }
+
+        .openclaw-badge-inner {
+            display: inline-flex;
+            align-items: center;
+            gap: 4px;
+        }
+
+        .openclaw-badge-text {
+            font-size: 10px;
+            color: rgba(255, 255, 255, 0.7);
+            font-weight: 500;
+        }
+
+        .member-since {
+            margin-bottom: 16px;
+        }
+
+        .member-since-text {
+            font-family: 'IBM Plex Mono', monospace;
+            font-size: 11px;
+            color: white;
+            opacity: 0.7;
+        }
+
+        .bloom-logo {
+            padding-top: 16px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .bloom-logo-inner {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            opacity: 0.8;
+        }
+
+        .bloom-logo-icon {
+            width: 24px;
+            height: 24px;
+            flex-shrink: 0;
+        }
+
+        .bloom-logo-icon img {
+            width: 100%;
+            height: 100%;
+            object-fit: contain;
+        }
+
+        .bloom-logo-text {
+            height: 16px;
+            flex-shrink: 0;
+        }
+
+        .bloom-logo-text img {
+            height: 100%;
+            width: auto;
+            object-fit: contain;
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <h1>🎴 Agent Identity Card Generator</h1>
+        <p>Exact replica of carousel cards from React components</p>
+        <div class="instructions">
+            <strong>📸 How to capture:</strong>
+            <ol>
+                <li>Right-click on a card below</li>
+                <li>Select "Inspect" or "Inspect Element"</li>
+                <li>Find the div with <code>id="card-visionary"</code> etc.</li>
+                <li>Right-click that div → "Capture node screenshot"</li>
+                <li>Save as <code>[personality]-card.png</code></li>
+            </ol>
+        </div>
+    </div>
+
+    <!-- The Visionary -->
+    <div class="card-label">
+        <h2>💜 The Visionary</h2>
+    </div>
+    <div id="card-visionary" class="agent-card bg-visionary" style="background-image: url('identity/visionary-agent-bg.png');">
+        <div class="card-hero">
+            <img src="identity/visionary-agent.png" alt="The Visionary">
+        </div>
+        <div class="card-content">
+            <h2 class="personality-name">The Visionary</h2>
+            <p class="personality-quote">"See beyond the hype"</p>
+            <p class="personality-description">You back bold ideas before they're obvious. Conviction drives you to see potential where others see risk.</p>
+
+            <div class="openclaw-badge">
+                <div class="openclaw-badge-inner">
+                    <span>🦞</span>
+                    <span class="openclaw-badge-text">via OpenClaw</span>
+                </div>
+            </div>
+
+            <div class="member-since">
+                <p class="member-since-text">Member since February 2026</p>
+            </div>
+
+            <div class="bloom-logo">
+                <div class="bloom-logo-inner">
+                    <div class="bloom-logo-icon">
+                        <img src="identity/bloom-logo.png" alt="Bloom">
+                    </div>
+                    <div class="bloom-logo-text">
+                        <img src="identity/bloom-text-logo.png" alt="Bloom Protocol">
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- The Explorer -->
+    <div class="card-label">
+        <h2>💚 The Explorer</h2>
+    </div>
+    <div id="card-explorer" class="agent-card bg-explorer" style="background-image: url('identity/explorer-agent-bg.png');">
+        <div class="card-hero">
+            <img src="identity/explorer-agent.png" alt="The Explorer">
+        </div>
+        <div class="card-content">
+            <h2 class="personality-name">The Explorer</h2>
+            <p class="personality-quote">"Never stop discovering"</p>
+            <p class="personality-description">You explore widely, always curious about what's next. You don't commit deeply—you sample, discover, and move on.</p>
+
+            <div class="openclaw-badge">
+                <div class="openclaw-badge-inner">
+                    <span>🦞</span>
+                    <span class="openclaw-badge-text">via OpenClaw</span>
+                </div>
+            </div>
+
+            <div class="member-since">
+                <p class="member-since-text">Member since February 2026</p>
+            </div>
+
+            <div class="bloom-logo">
+                <div class="bloom-logo-inner">
+                    <div class="bloom-logo-icon">
+                        <img src="identity/bloom-logo.png" alt="Bloom">
+                    </div>
+                    <div class="bloom-logo-text">
+                        <img src="identity/bloom-text-logo.png" alt="Bloom Protocol">
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- The Cultivator -->
+    <div class="card-label">
+        <h2>🩵 The Cultivator</h2>
+    </div>
+    <div id="card-cultivator" class="agent-card bg-cultivator" style="background-image: url('identity/cultivator-agent-bg.png');">
+        <div class="card-hero">
+            <img src="identity/cultivator-agent.png" alt="The Cultivator">
+        </div>
+        <div class="card-content">
+            <h2 class="personality-name">The Cultivator</h2>
+            <p class="personality-quote">"Grow what you believe in"</p>
+            <p class="personality-description">You help projects grow through feedback and community building. You're the supporter every builder dreams of.</p>
+
+            <div class="openclaw-badge">
+                <div class="openclaw-badge-inner">
+                    <span>🦞</span>
+                    <span class="openclaw-badge-text">via OpenClaw</span>
+                </div>
+            </div>
+
+            <div class="member-since">
+                <p class="member-since-text">Member since February 2026</p>
+            </div>
+
+            <div class="bloom-logo">
+                <div class="bloom-logo-inner">
+                    <div class="bloom-logo-icon">
+                        <img src="identity/bloom-logo.png" alt="Bloom">
+                    </div>
+                    <div class="bloom-logo-text">
+                        <img src="identity/bloom-text-logo.png" alt="Bloom Protocol">
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- The Optimizer -->
+    <div class="card-label">
+        <h2>🧡 The Optimizer</h2>
+    </div>
+    <div id="card-optimizer" class="agent-card bg-optimizer" style="background-image: url('identity/optimizer-agent-bg.png');">
+        <div class="card-hero">
+            <img src="identity/optimizer-agent.png" alt="The Optimizer">
+        </div>
+        <div class="card-content">
+            <h2 class="personality-name">The Optimizer</h2>
+            <p class="personality-quote">"Always leveling up"</p>
+            <p class="personality-description">There's always a better way. You don't settle—you iterate, improve, and optimize until it's right.</p>
+
+            <div class="openclaw-badge">
+                <div class="openclaw-badge-inner">
+                    <span>🦞</span>
+                    <span class="openclaw-badge-text">via OpenClaw</span>
+                </div>
+            </div>
+
+            <div class="member-since">
+                <p class="member-since-text">Member since February 2026</p>
+            </div>
+
+            <div class="bloom-logo">
+                <div class="bloom-logo-inner">
+                    <div class="bloom-logo-icon">
+                        <img src="identity/bloom-logo.png" alt="Bloom">
+                    </div>
+                    <div class="bloom-logo-text">
+                        <img src="identity/bloom-text-logo.png" alt="Bloom Protocol">
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- The Innovator -->
+    <div class="card-label">
+        <h2>💙 The Innovator</h2>
+    </div>
+    <div id="card-innovator" class="agent-card bg-innovator" style="background-image: url('identity/innovator-agent-bg.png');">
+        <div class="card-hero">
+            <img src="identity/innovator-agent.png" alt="The Innovator">
+        </div>
+        <div class="card-content">
+            <h2 class="personality-name">The Innovator</h2>
+            <p class="personality-quote">"First to back new tech"</p>
+            <p class="personality-description">You spot emerging tech before it breaks through. While others wait for proof, you're already backing the future.</p>
+
+            <div class="openclaw-badge">
+                <div class="openclaw-badge-inner">
+                    <span>🦞</span>
+                    <span class="openclaw-badge-text">via OpenClaw</span>
+                </div>
+            </div>
+
+            <div class="member-since">
+                <p class="member-since-text">Member since February 2026</p>
+            </div>
+
+            <div class="bloom-logo">
+                <div class="bloom-logo-inner">
+                    <div class="bloom-logo-icon">
+                        <img src="identity/bloom-logo.png" alt="Bloom">
+                    </div>
+                    <div class="bloom-logo-text">
+                        <img src="identity/bloom-text-logo.png" alt="Bloom Protocol">
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+</body>
+</html>

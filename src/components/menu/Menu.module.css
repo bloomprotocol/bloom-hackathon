@@ -1,0 +1,401 @@
+/* Glass-morphism Navigation Container - Primary (Center) */
+.navigationContainer {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 8px;
+  background-color: rgba(255, 255, 255, 0.5);
+  backdrop-filter: blur(5px);
+  -webkit-backdrop-filter: blur(5px);
+  border-radius: 100px;
+  box-shadow: 0px 6px 10px -4px rgba(0,0,0,0.12), 0px 0px 0px 1px rgba(0,0,0,0.05);
+  position: absolute;
+  left: 50%;
+  transform: translateX(-50%);
+}
+
+/* Secondary Navigation Container - Right side utility links */
+.secondaryNavContainer {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-right: 16px;
+}
+
+/* Navigation Pills */
+.navPill {
+  padding: 10px 20px;
+  border-radius: 40px;
+  font-family: var(--font-outfit), 'Outfit', sans-serif;
+  font-weight: 400;
+  font-size: 14px;
+  line-height: 1;
+  color: #696f8c;
+  text-decoration: none;
+  transition: all 0.2s ease;
+  background: transparent;
+  position: relative;
+  min-width: 100px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  white-space: nowrap;
+}
+
+.navPill:hover:not(.navPillActive) {
+  color: #393f49;
+}
+
+.navPillActive {
+  background: #292929;
+  color: #ffffff;
+  box-shadow: 0px 1px 1px 0.05px rgba(24,24,27,0.24);
+  position: relative;
+}
+
+/* Inset shadow overlay for active pill */
+.navPillActive::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  border-radius: 40px;
+  pointer-events: none;
+  box-shadow: inset 0px 2px 0px 0px rgba(255,255,255,0.1), inset 0px 8px 16px 0px rgba(255,255,255,0.16);
+}
+
+/* Secondary Nav Link - Consistent with primary nav style */
+.secondaryNavLink {
+  display: flex;
+  align-items: center;
+  padding: 6px 12px;
+  border-radius: 8px;
+  font-family: var(--font-outfit), 'Outfit', sans-serif;
+  font-weight: 400;
+  font-size: 14px;
+  line-height: 1;
+  color: #696f8c;
+  text-decoration: none;
+  transition: all 0.2s ease;
+  background: transparent;
+  border: none;
+  cursor: pointer;
+}
+
+.secondaryNavLink:hover {
+  color: #393f49;
+}
+
+/* Agents Premium Button - Gradient with glow and lobster emoji */
+.agentsPremiumButton {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  padding: 8px 16px;
+  height: 48px;
+  border-radius: 20px;
+  font-family: var(--font-outfit), 'Outfit', sans-serif;
+  font-weight: 400;
+  font-size: 14px;
+  line-height: 1;
+  color: #ffffff;
+  text-decoration: none;
+  transition: all 0.3s ease;
+  background: linear-gradient(135deg, #FF6B6B 0%, #FFB347 50%, #FFA07A 100%);
+  box-shadow: 0 4px 12px rgba(255, 107, 107, 0.3);
+  border: none;
+  cursor: pointer;
+}
+
+.agentsPremiumButton:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 6px 16px rgba(255, 107, 107, 0.4);
+}
+
+/* Builder Button - Subtle transparent style */
+.builderButton {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  padding: 8px 16px;
+  height: 48px;
+  border-radius: 20px;
+  font-family: var(--font-outfit), 'Outfit', sans-serif;
+  font-weight: 400;
+  font-size: 14px;
+  line-height: 1;
+  color: #7c3aed;
+  text-decoration: none;
+  transition: all 0.2s ease;
+  background: rgba(255, 255, 255, 0.5);
+  backdrop-filter: blur(5px);
+  border: 1px solid rgba(124, 58, 237, 0.2);
+  box-shadow: 0 2px 6px rgba(124, 58, 237, 0.1);
+  cursor: pointer;
+}
+
+.builderButton:hover {
+  background: rgba(255, 255, 255, 0.7);
+  border-color: rgba(124, 58, 237, 0.3);
+  box-shadow: 0 4px 10px rgba(124, 58, 237, 0.15);
+}
+
+/* Dashboard Button - Solid Premium Purple with icon */
+.dashboardButton {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  padding: 8px 16px;
+  border-radius: 20px;
+  font-family: var(--font-outfit), 'Outfit', sans-serif;
+  font-weight: 500;
+  font-size: 14px;
+  line-height: 1;
+  color: #ffffff;
+  text-decoration: none;
+  transition: all 0.2s ease;
+  background: #8478e0;
+  box-shadow: 0 2px 8px rgba(132, 120, 224, 0.3);
+  border: none;
+  cursor: pointer;
+}
+
+.dashboardButton:hover {
+  background: #6b5fd1;
+  box-shadow: 0 4px 12px rgba(132, 120, 224, 0.4);
+  transform: translateY(-1px);
+}
+
+/* Icon Buttons */
+.iconButton {
+  width: 48px;
+  height: 48px;
+  border-radius: 27px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border: none;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.iconButton:hover {
+  background: rgba(0, 0, 0, 0.05);
+}
+
+/* Points Display */
+.pointsDisplay {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  padding: 12px;
+  background-color: rgba(255, 255, 255, 0.8);
+  border-radius: 27px;
+  height: 48px;
+  box-shadow: 0px 3px 5px 0px rgba(200,206,215,0.25), 0px 2px 3px 0px rgba(135,175,199,0.12), 0px 4px 10px 0px rgba(222,228,235,0.25);
+}
+
+/* Auth Buttons */
+.authButtonConnect,
+.authButtonProfile,
+.authButtonLoading {
+  height: 48px;
+  padding: 0 20px;
+  border-radius: 27px;
+  font-family: var(--font-outfit), 'Outfit', sans-serif;
+  font-weight: 400;
+  font-size: 14px;
+  line-height: 1;
+  border: none;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+}
+
+.authButtonConnect {
+  background: rgba(255, 255, 255, 0.6);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+  color: #696f8c;
+  padding: 0 16px;
+  height: 48px;
+  font-family: var(--font-outfit), 'Outfit', sans-serif;
+  font-weight: 400;
+  font-size: 14px;
+  border: 1px solid rgba(0, 0, 0, 0.08);
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.04);
+  transition: all 0.2s ease;
+}
+
+.authButtonConnect:hover {
+  background: rgba(255, 255, 255, 0.8);
+  border-color: rgba(0, 0, 0, 0.12);
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.08);
+  color: #393f49;
+}
+
+/* Profile Dropdown Container */
+.profileDropdownContainer {
+  position: relative;
+}
+
+.authButtonProfile {
+  background: #383838;
+  color: #ffffff;
+  box-shadow: 0px 1px 1px 0.05px rgba(24,24,27,0.24);
+  padding: 0 16px;
+  position: relative;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+/* Inset shadow overlay for profile button */
+.authButtonProfile::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  border-radius: 27px;
+  pointer-events: none;
+  box-shadow: inset 0px 2px 0px 0px rgba(255,255,255,0.1), inset 0px 8px 16px 0px rgba(255,255,255,0.16);
+}
+
+.dropdownArrow {
+  font-size: 10px;
+  opacity: 0.7;
+  margin-left: -4px;
+}
+
+/* Profile Dropdown Menu */
+.profileDropdownMenu {
+  position: absolute;
+  top: calc(100% + 8px);
+  right: 0;
+  min-width: 200px;
+  background: #ffffff;
+  border-radius: 12px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15), 0 0 0 1px rgba(0, 0, 0, 0.05);
+  padding: 8px;
+  z-index: 1000;
+  animation: dropdownFadeIn 0.15s ease-out;
+}
+
+@keyframes dropdownFadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(-4px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.dropdownItem {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  width: 100%;
+  padding: 12px 16px;
+  border-radius: 8px;
+  font-family: var(--font-outfit), 'Outfit', sans-serif;
+  font-size: 14px;
+  font-weight: 400;
+  color: #393f49;
+  text-decoration: none;
+  background: transparent;
+  border: none;
+  cursor: pointer;
+  transition: background-color 0.15s ease;
+  text-align: left;
+}
+
+.dropdownItem:hover {
+  background-color: #f3f4f6;
+}
+
+.dropdownItem svg {
+  flex-shrink: 0;
+}
+
+.dropdownItem span {
+  flex: 1;
+}
+
+/* Dashboard — hero item in profile dropdown */
+.dropdownItemDashboard {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  width: 100%;
+  padding: 12px 16px;
+  border-radius: 10px;
+  font-family: var(--font-outfit), 'Outfit', sans-serif;
+  font-size: 14px;
+  font-weight: 600;
+  color: #7c3aed;
+  text-decoration: none;
+  background: linear-gradient(135deg, rgba(139, 92, 246, 0.08) 0%, rgba(124, 58, 237, 0.04) 100%);
+  border: 1px solid rgba(139, 92, 246, 0.12);
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.dropdownItemDashboard:hover {
+  background: linear-gradient(135deg, rgba(139, 92, 246, 0.14) 0%, rgba(124, 58, 237, 0.08) 100%);
+  border-color: rgba(139, 92, 246, 0.22);
+  box-shadow: 0 2px 8px rgba(139, 92, 246, 0.1);
+}
+
+.dropdownItemDashboard svg {
+  flex-shrink: 0;
+  color: #8b5cf6;
+}
+
+.dropdownItemDashboard span {
+  flex: 1;
+}
+
+.dropdownDivider {
+  height: 1px;
+  background: #e5e7eb;
+  margin: 4px 0;
+}
+
+.authButtonLoading {
+  background: #C496FF;
+  color: #FFFFFF;
+  cursor: not-allowed;
+}
+
+/* Legacy styles for backward compatibility */
+.connect-button {
+  display: inline-block;
+  height: 40px;
+  line-height: 40px;
+  text-decoration: none;
+  padding: 0 16px;
+  border: none;
+  outline: none;
+  border-radius: 20px;
+  transition: all 0.3s ease;
+}
+
+.processing {
+  background: #C496FF;
+  color: #FFFFFF;
+  font-weight: bold;
+}
+
+.link-cta {
+  background-color: #2D174A;
+  color: #fff;
+}
+
+.authenticated {
+  background-color: #8E38FF;
+  color: #fff;
+  font-weight: bold;
+}

@@ -1,0 +1,37 @@
+<svg width="24" height="24" viewBox="8 5 20 22" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <filter id="waterDropFilter" x="0" y="0" width="36" height="40" filterUnits="userSpaceOnUse" color-interpolation-filters="sRGB">
+      <feFlood flood-opacity="0" result="BackgroundImageFix"/>
+      <feColorMatrix in="SourceAlpha" type="matrix" values="0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 127 0" result="hardAlpha"/>
+      <feOffset dy="4"/>
+      <feGaussianBlur stdDeviation="5"/>
+      <feComposite in2="hardAlpha" operator="out"/>
+      <feColorMatrix type="matrix" values="0 0 0 0 0.870588 0 0 0 0 0.894118 0 0 0 0 0.921569 0 0 0 0.25 0"/>
+      <feBlend mode="normal" in2="BackgroundImageFix" result="effect1_dropShadow"/>
+      <feColorMatrix in="SourceAlpha" type="matrix" values="0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 127 0" result="hardAlpha"/>
+      <feOffset dy="2"/>
+      <feGaussianBlur stdDeviation="1.5"/>
+      <feComposite in2="hardAlpha" operator="out"/>
+      <feColorMatrix type="matrix" values="0 0 0 0 0.529412 0 0 0 0 0.686275 0 0 0 0 0.780392 0 0 0 0.12 0"/>
+      <feBlend mode="normal" in2="effect1_dropShadow" result="effect2_dropShadow"/>
+      <feColorMatrix in="SourceAlpha" type="matrix" values="0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 127 0" result="hardAlpha"/>
+      <feOffset dy="3"/>
+      <feGaussianBlur stdDeviation="2.5"/>
+      <feComposite in2="hardAlpha" operator="out"/>
+      <feColorMatrix type="matrix" values="0 0 0 0 0.784314 0 0 0 0 0.807843 0 0 0 0 0.843137 0 0 0 0.25 0"/>
+      <feBlend mode="normal" in2="effect2_dropShadow" result="effect3_dropShadow"/>
+      <feBlend mode="normal" in="SourceGraphic" in2="effect3_dropShadow" result="shape"/>
+    </filter>
+    <linearGradient id="waterDropGradient" x1="9.90484" y1="7.59021" x2="27.0403" y2="8.61557" gradientUnits="userSpaceOnUse">
+      <stop offset="0.0118" stop-color="#74FFDE"/>
+      <stop offset="0.2531" stop-color="#00DE73"/>
+      <stop offset="0.4978" stop-color="#41F09C"/>
+      <stop offset="0.7475" stop-color="#03D26E"/>
+      <stop offset="0.9683" stop-color="#00C466"/>
+    </linearGradient>
+  </defs>
+  <g filter="url(#waterDropFilter)">
+    <path d="M18.275 23C18.475 22.9833 18.646 22.904 18.788 22.762C18.93 22.62 19.0007 22.4493 19 22.25C19 22.0167 18.925 21.8293 18.775 21.688C18.625 21.5467 18.4333 21.484 18.2 21.5C17.5167 21.55 16.7917 21.3627 16.025 20.938C15.2583 20.5133 14.775 19.7423 14.575 18.625C14.5417 18.4417 14.4543 18.2917 14.313 18.175C14.1717 18.0583 14.009 18 13.825 18C13.5917 18 13.4 18.0877 13.25 18.263C13.1 18.4383 13.05 18.6423 13.1 18.875C13.3833 20.3917 14.05 21.475 15.1 22.125C16.15 22.775 17.2083 23.0667 18.275 23ZM18 26C15.7167 26 13.8127 25.2167 12.288 23.65C10.7633 22.0833 10.0007 20.1333 10 17.8C10 16.1333 10.6627 14.321 11.988 12.363C13.3133 10.405 15.3173 8.284 18 6C20.6833 8.28333 22.6877 10.4043 24.013 12.363C25.3383 14.3217 26.0007 16.134 26 17.8C26 20.1333 25.2377 22.0833 23.713 23.65C22.1883 25.2167 20.284 26 18 26Z" fill="#25AA61"/>
+    <path d="M18.275 23C18.475 22.9833 18.646 22.904 18.788 22.762C18.93 22.62 19.0007 22.4493 19 22.25C19 22.0167 18.925 21.8293 18.775 21.688C18.625 21.5467 18.4333 21.484 18.2 21.5C17.5167 21.55 16.7917 21.3627 16.025 20.938C15.2583 20.5133 14.775 19.7423 14.575 18.625C14.5417 18.4417 14.4543 18.2917 14.313 18.175C14.1717 18.0583 14.009 18 13.825 18C13.5917 18 13.4 18.0877 13.25 18.263C13.1 18.4383 13.05 18.6423 13.1 18.875C13.3833 20.3917 14.05 21.475 15.1 22.125C16.15 22.775 17.2083 23.0667 18.275 23ZM18 26C15.7167 26 13.8127 25.2167 12.288 23.65C10.7633 22.0833 10.0007 20.1333 10 17.8C10 16.1333 10.6627 14.321 11.988 12.363C13.3133 10.405 15.3173 8.284 18 6C20.6833 8.28333 22.6877 10.4043 24.013 12.363C25.3383 14.3217 26.0007 16.134 26 17.8C26 20.1333 25.2377 22.0833 23.713 23.65C22.1883 25.2167 20.284 26 18 26Z" fill="url(#waterDropGradient)"/>
+  </g>
+</svg>

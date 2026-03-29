@@ -1,0 +1,823 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Zen Garden — Sanctuary | Bloom Protocol</title>
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  html, body { width: 100%; height: 100%; overflow: hidden; font-family: 'DM Sans', system-ui, sans-serif; }
+  canvas { display: block; position: absolute; top: 0; left: 0; }
+  #overlay { position: absolute; top: 0; left: 0; width: 100%; height: 100%; pointer-events: none; z-index: 10; }
+  #top-bar { position: absolute; top: 24px; left: 50%; transform: translateX(-50%); display: flex; align-items: center; gap: 16px; pointer-events: auto; }
+  #top-bar h1 { font-size: 18px; font-weight: 600; letter-spacing: 0.05em; text-transform: uppercase; transition: color 0.8s; }
+  #toggle { width: 56px; height: 28px; border-radius: 14px; cursor: pointer; position: relative; border: 2px solid rgba(255,255,255,0.3); transition: background 0.8s; pointer-events: auto; }
+  #toggle .knob { width: 20px; height: 20px; border-radius: 50%; position: absolute; top: 2px; left: 2px; transition: transform 0.4s ease, background 0.8s; }
+  #toggle.night .knob { transform: translateX(28px); }
+  #prompt { position: absolute; bottom: 40px; left: 50%; transform: translateX(-50%); text-align: center; max-width: 480px; transition: color 0.8s; pointer-events: auto; }
+  #prompt p { font-size: 15px; line-height: 1.6; opacity: 0.85; font-style: italic; }
+  #prompt .tag { font-size: 11px; text-transform: uppercase; letter-spacing: 0.1em; opacity: 0.5; margin-top: 8px; }
+  #cards { position: absolute; bottom: 120px; left: 50%; transform: translateX(-50%); display: flex; gap: 16px; pointer-events: auto; }
+  .card { padding: 16px 24px; border-radius: 12px; cursor: pointer; backdrop-filter: blur(20px); border: 1px solid; border-top: 1px solid rgba(255,255,255,0.4); transition: all 0.4s ease; min-width: 180px; text-align: center; box-shadow: 0 4px 24px rgba(0,0,0,0.08); }
+  .card:hover { transform: translateY(-4px); box-shadow: 0 8px 32px rgba(0,0,0,0.12); }
+  .card h3 { font-size: 14px; font-weight: 600; margin-bottom: 4px; }
+  .card p { font-size: 11px; opacity: 0.7; }
+  .card .badge { display: inline-block; font-size: 9px; text-transform: uppercase; letter-spacing: 0.08em; padding: 2px 8px; border-radius: 4px; margin-top: 8px; }
+  #world-id { position: absolute; top: 24px; right: 24px; font-size: 10px; text-transform: uppercase; letter-spacing: 0.1em; padding: 6px 12px; border-radius: 20px; backdrop-filter: blur(8px); border: 1px solid; transition: all 0.8s; pointer-events: auto; }
+  #loading { position: absolute; top: 0; left: 0; width: 100%; height: 100%; display: flex; align-items: center; justify-content: center; background: #e8f0e0; color: #5a7050; font-size: 14px; z-index: 100; transition: opacity 0.8s; }
+  #loading.hidden { opacity: 0; pointer-events: none; }
+  #frost-gate { position: fixed; top: 0; left: 0; width: 100%; height: 100%; z-index: 50; display: flex; flex-direction: column; align-items: center; justify-content: center; backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px); background: rgba(245,243,239,0.3); transition: opacity 0.8s ease, backdrop-filter 0.8s ease; }
+  #frost-gate.unlocked { opacity: 0; backdrop-filter: blur(0px); -webkit-backdrop-filter: blur(0px); pointer-events: none; }
+  #frost-gate .lock-icon { font-size: 48px; margin-bottom: 16px; }
+  #frost-gate h2 { font-family: 'DM Sans', system-ui, sans-serif; font-size: 28px; font-weight: 600; color: #2a2a2a; margin-bottom: 8px; }
+  #frost-gate .sub { font-family: 'DM Sans', system-ui, sans-serif; font-size: 15px; color: #666; margin-bottom: 32px; max-width: 360px; text-align: center; line-height: 1.5; }
+  #frost-gate .gate-verify { font-family: 'DM Sans', system-ui, sans-serif; padding: 14px 32px; border-radius: 28px; font-size: 15px; font-weight: 600; cursor: pointer; border: none; background: #7c3aed; color: #fff; transition: all 0.3s; box-shadow: 0 4px 16px rgba(124,58,237,0.3); }
+  #frost-gate .gate-verify:hover { transform: translateY(-2px); box-shadow: 0 6px 20px rgba(124,58,237,0.4); }
+  #frost-gate .gate-verify:disabled { opacity: 0.6; cursor: wait; transform: none; }
+  #frost-gate .powered { font-family: 'DM Sans', system-ui, sans-serif; font-size: 11px; color: #999; margin-top: 16px; }
+  #frost-gate .badge { font-family: 'JetBrains Mono', monospace; font-size: 10px; letter-spacing: 0.08em; text-transform: uppercase; padding: 4px 12px; border-radius: 20px; background: rgba(234,179,8,0.1); color: #b45309; margin-bottom: 24px; }
+  #sanctuary-modal { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; z-index: 200; align-items: center; justify-content: center; }
+  #sanctuary-modal.open { display: flex; }
+  #sanctuary-backdrop { position: absolute; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.4); backdrop-filter: blur(8px); }
+  #sanctuary-content { position: relative; z-index: 1; max-width: 420px; width: 90%; border-radius: 20px; padding: 32px; text-align: center; }
+  #sanctuary-content h2 { font-size: 20px; font-weight: 600; margin-bottom: 8px; }
+  #sanctuary-content .sub { font-size: 13px; opacity: 0.7; margin-bottom: 20px; line-height: 1.5; }
+  #sanctuary-content .prompt-box { text-align: left; padding: 16px; border-radius: 12px; margin-bottom: 16px; cursor: pointer; font-family: 'JetBrains Mono', monospace; font-size: 12px; line-height: 1.6; user-select: all; }
+  #sanctuary-content .human-badge { display: inline-flex; align-items: center; gap: 6px; font-size: 11px; text-transform: uppercase; letter-spacing: 0.08em; padding: 4px 12px; border-radius: 20px; margin-bottom: 16px; }
+  #sanctuary-content .verify-btn { display: inline-block; padding: 10px 24px; border-radius: 24px; font-size: 13px; font-weight: 600; cursor: pointer; border: none; transition: opacity 0.2s; }
+  #sanctuary-content .verify-btn:hover { opacity: 0.85; }
+  #sanctuary-content .close-btn { position: absolute; top: 12px; right: 16px; font-size: 18px; cursor: pointer; opacity: 0.5; background: none; border: none; }
+  #sanctuary-content .close-btn:hover { opacity: 1; }
+  #sanctuary-content .privacy { font-size: 11px; opacity: 0.5; margin-top: 12px; }
+</style>
+<script type="importmap">
+{ "imports": { "three": "https://cdn.jsdelivr.net/npm/three@0.170.0/build/three.module.js", "three/addons/": "https://cdn.jsdelivr.net/npm/three@0.170.0/examples/jsm/" } }
+</script>
+</head>
+<body>
+<div id="loading">Entering the Garden...</div>
+
+<!-- Frosted glass gate — 3D visible but blurred behind -->
+<div id="frost-gate">
+  <span class="badge">🔒 HUMAN ONLY</span>
+  <div class="lock-icon">🏔</div>
+  <h2>Sanctuary</h2>
+  <p class="sub">A space for humans, guided by their agents. Verify once to enter.</p>
+  <button class="gate-verify" onclick="unlockGarden()">Verify with World App</button>
+  <p class="powered">Powered by World AgentKit · Zero personal data shared</p>
+</div>
+<div id="overlay">
+  <div id="top-bar">
+    <h1 id="title">Zen Garden</h1>
+    <span id="sun-icon" style="font-size:14px;transition:opacity 0.8s">&#9788;</span>
+    <div id="toggle" onclick="toggleMode()"><div class="knob"></div></div>
+    <span id="moon-icon" style="font-size:13px;transition:opacity 0.8s">&#9790;</span>
+  </div>
+  <div id="world-id">World ID Verified</div>
+  <div id="cards">
+    <div class="card" onclick="openSanctuary('council')"><h3>The Council</h3><p>I need perspective — show me how others navigated this</p><span class="badge">Active</span></div>
+    <div class="card" onclick="openSanctuary('zen')"><h3>Zen</h3><p>I need clarity — help me hear what I already know</p><span class="badge">Active</span></div>
+  </div>
+  <div id="prompt"><p>Whatever is on your mind, you are not alone.</p><div class="tag">Sanctuary — Bloom Protocol</div></div>
+</div>
+
+<!-- Human Gating Modal -->
+<div id="sanctuary-modal">
+  <div id="sanctuary-backdrop" onclick="closeModal()"></div>
+  <div id="sanctuary-content">
+    <button class="close-btn" onclick="closeModal()">&times;</button>
+    <!-- State 1: Need verification -->
+    <div id="modal-verify" style="display:none;">
+      <div class="human-badge" style="background:rgba(234,179,8,0.1);color:#b45309;">🔒 Human Only</div>
+      <h2>Sanctuary requires proof of human</h2>
+      <p class="sub">This space is for humans, guided by their agents. Verify once — your agent handles the rest.</p>
+      <button class="verify-btn" onclick="verifyHuman()" style="background:#7c3aed;color:#fff;">Verify with World App</button>
+      <p class="privacy">Powered by World AgentKit · Zero personal data shared</p>
+    </div>
+    <!-- State 2: Verified — show prompt -->
+    <div id="modal-prompt" style="display:none;">
+      <div class="human-badge" style="background:rgba(34,197,94,0.1);color:#16a34a;">✓ Human Verified</div>
+      <h2 id="modal-title"></h2>
+      <p class="sub" id="modal-sub"></p>
+      <p style="font-size:12px;opacity:0.6;margin-bottom:8px;text-align:left;">Paste this to your agent:</p>
+      <div class="prompt-box" id="modal-prompt-text" title="Click to select" onclick="selectPrompt()"></div>
+      <p class="privacy">🔒 Conversation stays on your machine · Bloom never sees your session</p>
+    </div>
+  </div>
+</div>
+
+<script type="module">
+import * as THREE from 'three';
+import { OrbitControls } from 'three/addons/controls/OrbitControls.js';
+import { EffectComposer } from 'three/addons/postprocessing/EffectComposer.js';
+import { RenderPass } from 'three/addons/postprocessing/RenderPass.js';
+import { UnrealBloomPass } from 'three/addons/postprocessing/UnrealBloomPass.js';
+
+let isNight=false, tp=0, tpT=0;
+const clock=new THREE.Clock();
+const lerp=(a,b,t)=>a+(b-a)*t;
+const lerpC=(c,a,b,t)=>{c.r=a.r+(b.r-a.r)*t;c.g=a.g+(b.g-a.g)*t;c.b=a.b+(b.b-a.b)*t;};
+
+// ── Renderer ──
+const scene=new THREE.Scene();
+const camera=new THREE.PerspectiveCamera(50,innerWidth/innerHeight,0.1,500);
+camera.position.set(0,4,14);
+
+const renderer=new THREE.WebGLRenderer({antialias:true});
+renderer.setSize(innerWidth,innerHeight);
+renderer.setPixelRatio(Math.min(devicePixelRatio,2));
+renderer.toneMapping=THREE.ACESFilmicToneMapping;
+renderer.toneMappingExposure=1.1;
+renderer.shadowMap.enabled=true;
+renderer.shadowMap.type=THREE.PCFSoftShadowMap;
+document.body.prepend(renderer.domElement);
+
+const composer=new EffectComposer(renderer);
+composer.addPass(new RenderPass(scene,camera));
+const bloom=new UnrealBloomPass(new THREE.Vector2(innerWidth,innerHeight),0.3,0.6,0.6);
+composer.addPass(bloom);
+
+const controls=new OrbitControls(camera,renderer.domElement);
+controls.enableDamping=true;controls.dampingFactor=0.04;
+controls.maxPolarAngle=Math.PI/2.15;controls.minDistance=6;controls.maxDistance=25;
+controls.target.set(0,1.5,0);controls.autoRotate=false;
+
+// ── Palettes ──
+const DAY={
+  skyTop:new THREE.Color(0x7898b8), // darker dreamy blue
+  skyBot:new THREE.Color(0xd8c0b8), // muted peach horizon
+  ground:new THREE.Color(0xd9ebce), // #d9ebce
+  fog:new THREE.Color(0xd9ebce),    // match ground so no grey wash
+  ambient:new THREE.Color(0xffffff),
+  sun:new THREE.Color(0xfffae0),
+};
+const NIGHT={
+  skyTop:new THREE.Color(0x080820),
+  skyBot:new THREE.Color(0x141030),
+  ground:new THREE.Color(0x0c1008),
+  fog:new THREE.Color(0x080810),
+  ambient:new THREE.Color(0x181830),
+  sun:new THREE.Color(0x6668a0),
+};
+
+// ── Sky ──
+const skyMat=new THREE.ShaderMaterial({
+  uniforms:{topColor:{value:DAY.skyTop.clone()},botColor:{value:DAY.skyBot.clone()},midColor:{value:new THREE.Color(0xb8a6c8)}},
+  vertexShader:`varying vec3 vWP;void main(){vWP=(modelMatrix*vec4(position,1.)).xyz;gl_Position=projectionMatrix*viewMatrix*vec4(vWP,1.);}`,
+  fragmentShader:`uniform vec3 topColor,botColor,midColor;varying vec3 vWP;void main(){float h=normalize(vWP).y;vec3 col=mix(botColor,midColor,smoothstep(0.0,0.15,h));col=mix(col,topColor,smoothstep(0.15,0.45,h));gl_FragColor=vec4(col,1.);}`,
+  side:THREE.BackSide,
+});
+scene.add(new THREE.Mesh(new THREE.SphereGeometry(200,32,32),skyMat));
+scene.fog=new THREE.FogExp2(DAY.fog,0.008); // very light fog
+
+// ── Lights ──
+const ambLight=new THREE.AmbientLight(DAY.ambient,0.5);
+scene.add(ambLight);
+const sunLight=new THREE.DirectionalLight(DAY.sun,1.5);
+sunLight.position.set(8,15,6);sunLight.castShadow=true;
+sunLight.shadow.mapSize.set(1024,1024);
+const shc=sunLight.shadow.camera;shc.near=1;shc.far=50;shc.left=-18;shc.right=18;shc.top=18;shc.bottom=-18;
+scene.add(sunLight);
+
+// ── Ground ──
+const gMat=new THREE.MeshStandardMaterial({color:DAY.ground,roughness:0.95,metalness:0});
+const ground=new THREE.Mesh(new THREE.PlaneGeometry(80,80).rotateX(-Math.PI/2),gMat);
+ground.receiveShadow=true;
+scene.add(ground);
+
+// ── Petal geometry (bezier curve shape) ──
+function makePetal(w, h) {
+  const s = new THREE.Shape();
+  s.moveTo(0, 0);
+  s.bezierCurveTo(w*0.6, h*0.25, w*0.5, h*0.75, 0, h);
+  s.bezierCurveTo(-w*0.5, h*0.75, -w*0.6, h*0.25, 0, 0);
+  return new THREE.ShapeGeometry(s, 4);
+}
+
+// ── Flower builder using MeshPhysicalMaterial (translucent petals) ──
+function makeFlower(x, z, scale, petalColor, centerColor, petalN, layers) {
+  const s = scale;
+  const stemH = (0.03 + Math.random()*0.04) * s;
+
+  // Stem (curved tube)
+  const curve = new THREE.CubicBezierCurve3(
+    new THREE.Vector3(x,0,z),
+    new THREE.Vector3(x+(Math.random()-0.5)*0.2*s, stemH*0.4, z+(Math.random()-0.5)*0.2*s),
+    new THREE.Vector3(x+(Math.random()-0.5)*0.15*s, stemH*0.7, z+(Math.random()-0.5)*0.15*s),
+    new THREE.Vector3(x, stemH, z)
+  );
+  scene.add(new THREE.Mesh(
+    new THREE.TubeGeometry(curve, 8, 0.02*s, 5, false),
+    new THREE.MeshStandardMaterial({color:0x5a9048,roughness:0.8})
+  ));
+
+  // Leaves
+  const leafMat = new THREE.MeshPhysicalMaterial({
+    color:0x68a850, roughness:0.6, transmission:0.15, thickness:0.5, side:THREE.DoubleSide
+  });
+  for(let li=0;li<2;li++){
+    const leaf = new THREE.Mesh(makePetal(0.15*s, 0.3*s), leafMat);
+    const pt = curve.getPoint(0.25+li*0.25);
+    leaf.position.copy(pt);
+    leaf.rotation.set(0.2+li*0.4, li*1.8, li===0?-0.5:0.5);
+    scene.add(leaf);
+  }
+
+  // Flower center
+  const center = new THREE.Mesh(
+    new THREE.SphereGeometry(0.08*s, 10, 8),
+    new THREE.MeshStandardMaterial({color:centerColor, roughness:0.4, emissive:centerColor, emissiveIntensity:0.1})
+  );
+  center.position.set(x, stemH, z);
+  scene.add(center);
+
+  // Translucent petals using MeshPhysicalMaterial
+  const petalMat = new THREE.MeshPhysicalMaterial({
+    color: petalColor,
+    roughness: 0.4,
+    transmission: 0.3,   // light passes through
+    thickness: 0.3,
+    side: THREE.DoubleSide,
+    transparent: true,
+    opacity: 0.92,
+  });
+
+  for(let layer=0; layer<layers; layer++){
+    const lt = layer / layers;
+    const pw = (0.12 + lt*0.1) * s;
+    const ph = (0.18 + lt*0.12) * s;
+    const pr = (0.05 + lt*0.12) * s;
+    const tilt = 0.4 + lt*0.7; // inner upright, outer open
+    const count = petalN + layer;
+
+    // Slightly lighter outer layers
+    const layerMat = layer === 0 ? petalMat : new THREE.MeshPhysicalMaterial({
+      color: new THREE.Color(petalColor).lerp(new THREE.Color(0xffffff), lt*0.2),
+      roughness: 0.4, transmission: 0.35, thickness: 0.2,
+      side: THREE.DoubleSide, transparent: true, opacity: 0.88,
+    });
+
+    for(let p=0; p<count; p++){
+      const angle = (p/count)*Math.PI*2 + layer*0.4;
+      const petal = new THREE.Mesh(makePetal(pw, ph), layerMat);
+      petal.position.set(
+        x + Math.cos(angle)*pr,
+        stemH - 0.01*s,
+        z + Math.sin(angle)*pr
+      );
+      petal.rotation.order = 'YXZ';
+      petal.rotation.y = -angle + Math.PI/2;
+      petal.rotation.x = tilt + (Math.random()-0.5)*0.15; // bloom upward
+      scene.add(petal);
+    }
+  }
+}
+
+// ── Place flowers (dense, soft pink + light purple palette) ──
+// [x, z, scale, petalColor, centerColor, petals, layers]
+const flowerDefs = [
+  // Large soft pink flowers
+  [-5,  0, 2.8, 0xffc0c8, 0xf0d060, 6, 4],  // soft pink
+  [ 6, -1, 3.0, 0xffd0d8, 0xf0d060, 6, 4],  // blush
+  [-4, -7, 2.5, 0xe0d0ff, 0xf0d060, 7, 4],  // light purple
+  [ 6, -7, 2.2, 0xffc8d8, 0xf0d060, 5, 3],  // rose pink
+  [-7,  3, 2.4, 0xd8c8f0, 0xf0d060, 6, 3],  // soft lilac
+  [ 8,  2, 2.6, 0xffd8e0, 0xf0d060, 6, 4],  // pale pink
+  [-2,  6, 2.0, 0xe8d8ff, 0xf0d060, 5, 3],  // lavender
+  [ 6, -3, 2.3, 0xffc0d0, 0xf0d060, 6, 4],  // warm pink
+  // Mid ring
+  [-2, -9, 3.0, 0xf8b8c0, 0xf0d060, 7, 5],  // medium pink
+  [ 3,-10, 2.8, 0xd0c0f0, 0xf0d060, 7, 4],  // light violet
+  [ 9, -7, 2.5, 0xe8d0ff, 0xf0d060, 5, 3],  // pale purple
+  [-8, -6, 2.8, 0xffc8c8, 0xf0d060, 6, 4],  // soft coral pink
+  [-5, -7, 2.0, 0xddd0ff, 0xf0d060, 5, 3],  // lilac
+  [ 7, -4, 2.2, 0xffd0d0, 0xf0d060, 6, 3],  // shell pink
+  [-9, -1, 2.0, 0xd8c0e8, 0xf0d060, 5, 3],  // soft violet
+  [ 10, 0, 2.3, 0xffc0c0, 0xf0d060, 6, 4],  // pink
+  // Back (bigger, filling the hills area)
+  [ 0,-13, 3.2, 0xf0c0d0, 0xf0d060, 7, 5],  // large blush
+  [-5,-11, 3.0, 0xd8c8ff, 0xf0d060, 6, 4],  // large lilac
+  [ 6,-11, 2.8, 0xffd8e8, 0xf0d060, 6, 4],  // large pale pink
+  [-10,-3, 2.2, 0xe0c8f0, 0xf0d060, 5, 3],  // violet
+  [ 10,-4, 2.0, 0xffc8d0, 0xf0d060, 5, 3],  // pink
+  [-3,-14, 2.5, 0xddd0ff, 0xf0d060, 6, 4],  // lilac
+  [ 4,-13, 2.3, 0xffd0d8, 0xf0d060, 6, 3],  // blush
+  [-7,-12, 2.0, 0xe8d8ff, 0xf0d060, 5, 3],  // lavender
+  [ 8,-12, 2.2, 0xffc0c8, 0xf0d060, 6, 3],  // pink
+  // Small accent flowers — scattered densely
+  [-1,  4, 1.5, 0xffe0e8, 0xf0d060, 5, 2],  // pale pink
+  [ 3,  3, 1.4, 0xe0d0ff, 0xf0d060, 5, 2],  // light purple
+  [-6, -9, 1.6, 0xffd0d8, 0xf0d060, 5, 2],  // blush
+  [ 8, -9, 1.5, 0xd8c0f0, 0xf0d060, 5, 2],  // lilac
+  [-6,  3, 1.5, 0xeee0ff, 0xf0d060, 5, 2],  // pale violet
+  [ 2,  4, 1.3, 0xffc8d0, 0xf0d060, 5, 2],  // pink
+  [-2,  5, 1.2, 0xd8d0ff, 0xf0d060, 5, 2],  // lavender
+  [ 5,  4, 1.4, 0xffdce0, 0xf0d060, 5, 2],  // shell pink
+  [-8,  1, 1.3, 0xe8d8f8, 0xf0d060, 5, 2],  // soft lilac
+  [-1, -8, 1.6, 0xffc8c8, 0xf0d060, 5, 2],  // warm pink
+  [-6,  5, 1.3, 0xddd0ff, 0xf0d060, 5, 2],  // light violet
+  [ 7,  4, 1.2, 0xffd8d8, 0xf0d060, 5, 2],  // pale pink
+  [-9, -8, 1.5, 0xe0d0f0, 0xf0d060, 5, 2],  // lilac
+  [ 9, -2, 1.4, 0xffc0d0, 0xf0d060, 5, 2],  // pink
+];
+flowerDefs.forEach(([x,z,s,pc,cc,pn,ly])=>makeFlower(x,z,s,pc,cc,pn,ly));
+
+// ── Rolling purple hills (surrounding the garden like distant terrain) ──
+const hillColors=[
+  0xc8b0e0, // soft lavender
+  0xd0b8e8, // light purple
+  0xc0a8d8, // muted violet
+  0xdcc8f0, // pale lilac
+  0xf0c8d8, // soft pink
+  0xd8b0d0, // pink-purple
+  0xf8d0dc, // pale rose
+  0xe8c0d8, // dusty pink
+];
+// Hills defined as [x, z, radiusX, radiusZ, height, color index]
+const hillDefs=[
+  // Back row (furthest, tallest) — mix purple & pink
+  [ 0, -22, 12, 6, 4.5, 0],
+  [-14,-18, 10, 5, 3.8, 4],  // soft pink
+  [ 15,-20, 11, 5, 4.0, 1],
+  // Mid row
+  [-18, -10, 8, 5, 3.0, 6],  // pale rose
+  [ 19, -12, 9, 5, 3.2, 3],
+  [-12, -15, 7, 4, 2.5, 5],  // pink-purple
+  [ 12, -16, 8, 4, 2.8, 7],  // dusty pink
+  // Side hills
+  [-20,  -2, 7, 5, 2.8, 1],
+  [ 20,  -4, 8, 5, 2.6, 4],  // soft pink
+  [-16,   4, 6, 4, 2.0, 7],  // dusty pink
+  [ 18,   3, 7, 4, 2.2, 2],
+  // Near-back fill
+  [ -6, -18, 6, 3, 2.0, 6],  // pale rose
+  [  8, -19, 7, 3, 2.2, 5],  // pink-purple
+  // Far corners
+  [-22, -16, 6, 4, 2.5, 0],
+  [ 22, -17, 6, 4, 2.3, 4],  // soft pink
+];
+hillDefs.forEach(([hx,hz,rx,rz,hy,ci])=>{
+  const hillGeo=new THREE.SphereGeometry(1,24,16,0,Math.PI*2,0,Math.PI/2);
+  const hillMat=new THREE.MeshStandardMaterial({
+    color:hillColors[ci],roughness:0.85,metalness:0,
+  });
+  const hill=new THREE.Mesh(hillGeo,hillMat);
+  hill.scale.set(rx,hy,rz);
+  hill.position.set(hx,0,hz);
+  hill.receiveShadow=true;hill.castShadow=true;
+  scene.add(hill);
+});
+
+// ── Roses (tight spiral petals) ──
+function makeRose(x, z, scale, color) {
+  const s=scale;
+  const stemH=(0.02+Math.random()*0.03)*s;
+  // Stem
+  const curve=new THREE.CubicBezierCurve3(
+    new THREE.Vector3(x,0,z),
+    new THREE.Vector3(x+(Math.random()-0.5)*0.1*s, stemH*0.4, z),
+    new THREE.Vector3(x+(Math.random()-0.5)*0.08*s, stemH*0.7, z),
+    new THREE.Vector3(x, stemH, z)
+  );
+  scene.add(new THREE.Mesh(new THREE.TubeGeometry(curve,8,0.02*s,5,false),
+    new THREE.MeshStandardMaterial({color:0x3a7030,roughness:0.8})));
+  // Tight layered petals (4 layers, curling inward)
+  for(let layer=0;layer<4;layer++){
+    const lt=layer/4;
+    const pw=(0.06+lt*0.04)*s, ph=(0.08+lt*0.05)*s;
+    const pr=(0.02+lt*0.04)*s;
+    const tilt=1.2-lt*0.6; // inner petals more upright
+    const cnt=5+layer;
+    const layerColor=new THREE.Color(color).lerp(new THREE.Color(0xffffff),lt*0.15);
+    const mat=new THREE.MeshPhysicalMaterial({
+      color:layerColor, roughness:0.35, transmission:0.1, thickness:0.2,
+      side:THREE.DoubleSide, transparent:true, opacity:0.92
+    });
+    for(let p=0;p<cnt;p++){
+      const angle=(p/cnt)*Math.PI*2+layer*0.5;
+      const petal=new THREE.Mesh(makePetal(pw,ph),mat);
+      petal.position.set(x+Math.cos(angle)*pr, stemH-0.01*s, z+Math.sin(angle)*pr);
+      petal.rotation.order='YXZ';
+      petal.rotation.y=-angle+Math.PI/2;
+      petal.rotation.x=tilt+(Math.random()-0.5)*0.1;
+      scene.add(petal);
+    }
+  }
+}
+// Place roses
+const roseDefs=[
+  [-2.5, 2.5, 1.8, 0xcc2244], // crimson
+  [ 4.0, 1.5, 1.5, 0xe83050], // red
+  [-6.5,-4.0, 2.0, 0xff6080], // hot pink
+  [ 7.0,-6.0, 1.6, 0xb01030], // deep red
+  [-1.0,-7.0, 1.4, 0xff4060], // bright red
+  [ 9.5, 0.0, 1.3, 0xd02050], // rose red
+  [-8.5,-2.0, 1.7, 0xe84070], // medium pink-red
+];
+roseDefs.forEach(([x,z,s,c])=>makeRose(x,z,s,c));
+
+
+
+// ── Zen sand circle with ripple rings ──
+const sandMat=new THREE.MeshStandardMaterial({color:0xe8e0d0,roughness:0.85,metalness:0});
+const sandCircle=new THREE.Mesh(new THREE.CircleGeometry(5,64).rotateX(-Math.PI/2),sandMat);
+sandCircle.position.set(0,0.02,0);sandCircle.receiveShadow=true;
+scene.add(sandCircle);
+
+// Concentric ripple rings (raked sand lines)
+const ringMat=new THREE.MeshBasicMaterial({color:0xc0b098,transparent:true,opacity:0.75});
+for(let r=1.0;r<4.8;r+=0.45){
+  const ring=new THREE.Mesh(new THREE.RingGeometry(r-0.025,r+0.025,80).rotateX(-Math.PI/2),ringMat);
+  ring.position.set(0,0.03,0);
+  scene.add(ring);
+}
+
+// ── Stones around zen circle ──
+const stoneMat=new THREE.MeshStandardMaterial({color:0x8a8a80,roughness:0.8,metalness:0.05});
+const stoneDefs=[
+  // [x, z, sx, sy, sz, ry] — position, scale, rotation
+  [ 2.8, 0.5,  0.5, 0.35, 0.4,  0.3],
+  [-2.5,-1.0,  0.4, 0.3,  0.35, 1.2],
+  [ 1.5,-2.8,  0.6, 0.4,  0.5,  0.8],
+  [-1.8, 2.5,  0.35,0.25, 0.3,  2.0],
+  [ 3.5,-1.8,  0.3, 0.2,  0.25, 0.5],
+  [-3.2, 1.2,  0.45,0.3,  0.35, 1.5],
+  [ 0.8, 3.2,  0.3, 0.22, 0.28, 0.9],
+  [-0.5,-3.5,  0.35,0.28, 0.3,  2.3],
+  // Stacked stones (taller, like standing stones)
+  [ 4.0, 0.0,  0.25,0.7,  0.2,  0.4],
+  [-3.8,-0.5,  0.2, 0.6,  0.18, 1.8],
+];
+const lightStoneMat=new THREE.MeshStandardMaterial({color:0xc8c4c0,roughness:0.75,metalness:0.05});
+const mossyStoneMat=new THREE.MeshStandardMaterial({color:0x8a9080,roughness:0.9,metalness:0.03});
+let stoneIdx=0;
+stoneDefs.forEach(([sx,sz,scx,scy,scz,ry])=>{
+  const mat=stoneIdx%3===2?mossyStoneMat:(scy>0.5?stoneMat:lightStoneMat);
+  stoneIdx++;
+  const stone=new THREE.Mesh(new THREE.SphereGeometry(1,8,6),mat);
+  stone.scale.set(scx,scy,scz);
+  stone.position.set(sx,scy*0.5,sz);
+  stone.rotation.y=ry;
+  stone.castShadow=true;stone.receiveShadow=true;
+  scene.add(stone);
+});
+
+// ── Marble fountain (center) ──
+const marbleMat=new THREE.MeshStandardMaterial({color:0xf8f6f4,roughness:0.15,metalness:0.02});
+const waterFountainMat=new THREE.MeshStandardMaterial({color:0xa0d0f0,transparent:true,opacity:0.45,roughness:0.05,metalness:0.02,emissive:0x90c8e8,emissiveIntensity:0.08});
+// Base basin
+const fBasin=new THREE.Mesh(new THREE.CylinderGeometry(0.75,0.85,0.1,32),marbleMat);
+fBasin.position.set(0,0.06,0);fBasin.castShadow=true;fBasin.receiveShadow=true;scene.add(fBasin);
+// Basin rim
+scene.add(new THREE.Mesh(new THREE.TorusGeometry(0.8,0.04,12,32).rotateX(Math.PI/2),marbleMat).translateY(0.11));
+// Water in basin
+const bWater=new THREE.Mesh(new THREE.CylinderGeometry(0.68,0.68,0.06,32),waterFountainMat);
+bWater.position.set(0,0.09,0);scene.add(bWater);
+// Pillar
+const fPillar=new THREE.Mesh(new THREE.CylinderGeometry(0.08,0.11,0.4,16),marbleMat);
+fPillar.position.set(0,0.31,0);fPillar.castShadow=true;scene.add(fPillar);
+// Upper bowl
+const fBowl=new THREE.Mesh(new THREE.CylinderGeometry(0.3,0.1,0.08,24),marbleMat);
+fBowl.position.set(0,0.55,0);fBowl.castShadow=true;scene.add(fBowl);
+// Upper rim
+scene.add(new THREE.Mesh(new THREE.TorusGeometry(0.3,0.025,10,24).rotateX(Math.PI/2),marbleMat).translateY(0.59));
+// Water in upper bowl
+const uWater=new THREE.Mesh(new THREE.CylinderGeometry(0.25,0.25,0.04,24),waterFountainMat);
+uWater.position.set(0,0.57,0);scene.add(uWater);
+// Top finial
+scene.add(new THREE.Mesh(new THREE.SphereGeometry(0.06,16,12),marbleMat).translateY(0.68));
+
+// ── Crystal sphere ──
+const crystalMat=new THREE.ShaderMaterial({
+  uniforms:{time:{value:0},nightMix:{value:0}},
+  vertexShader:`
+    varying vec3 vN,vV,vR;
+    void main(){
+      vN=normalize(normalMatrix*normal);
+      vec4 mv=modelViewMatrix*vec4(position,1.);
+      vV=normalize(-mv.xyz);
+      vec3 wN=normalize(mat3(modelMatrix)*normal);
+      vec3 vDir=normalize((modelMatrix*vec4(position,1.)).xyz-cameraPosition);
+      vR=reflect(vDir,wN);
+      gl_Position=projectionMatrix*mv;
+    }
+  `,
+  fragmentShader:`
+    uniform float time,nightMix;varying vec3 vN,vV,vR;
+    void main(){
+      float f=pow(1.-abs(dot(vN,vV)),3.);
+      float ang=atan(vR.x,vR.z)*0.5+time*0.06;
+      vec3 rb=vec3(0.5+0.2*sin(ang*2.),0.5+0.2*sin(ang*2.+2.09),0.5+0.2*sin(ang*2.+4.19));
+      vec3 dayC=mix(vec3(0.95,0.92,0.96),rb,f*0.5);
+      float spec=pow(max(0.,dot(vR,normalize(vec3(0.5,0.7,0.4)))),24.);
+      dayC+=vec3(1.,.98,.95)*spec*0.5;
+      vec3 nightC=mix(vec3(0.12,0.08,0.2),rb*0.6,f*0.6);
+      float mspec=pow(max(0.,dot(vR,normalize(vec3(-0.3,0.6,-0.3)))),20.);
+      nightC+=vec3(0.6,0.6,0.8)*mspec*0.4;
+      gl_FragColor=vec4(mix(dayC,nightC,nightMix),0.12+f*0.5+spec*0.2*(1.-nightMix));
+    }
+  `,
+  transparent:true,depthWrite:false,side:THREE.DoubleSide,
+});
+const crystal=new THREE.Mesh(new THREE.SphereGeometry(1.2,64,48),crystalMat);
+crystal.position.set(0,2.0,0);scene.add(crystal);
+
+const glow=new THREE.Mesh(
+  new THREE.SphereGeometry(0.5,32,32),
+  new THREE.MeshBasicMaterial({color:0xfff8f0,transparent:true,opacity:0.1})
+);
+glow.position.copy(crystal.position);scene.add(glow);
+
+// Night point light on crystal
+const crystalLight=new THREE.PointLight(0xb0a0e0,0,8,2);
+crystalLight.position.set(0,2.3,0);
+scene.add(crystalLight);
+
+// ── Floating petals (using makePetal for organic shape) ──
+const petalCount=50;
+const petalColors=[0xf8b0b8,0xf0c8d0,0xe8a0b0,0xf8d0d8,0xfff0e8];
+const petals=[];
+for(let i=0;i<petalCount;i++){
+  const sz=0.12+Math.random()*0.14; // bigger range
+  const m=new THREE.Mesh(makePetal(sz,sz*1.5),new THREE.MeshBasicMaterial({
+    color:petalColors[i%5],
+    transparent:true,opacity:0.75,side:THREE.DoubleSide,depthWrite:false
+  }));
+  const a=Math.random()*6.28,d=2+Math.random()*14;
+  m.position.set(Math.cos(a)*d,1.5+Math.random()*5,Math.sin(a)*d);
+  m.rotation.set(Math.random()*6.28,Math.random()*6.28,Math.random()*6.28);
+  scene.add(m);
+  petals.push({mesh:m,bx:m.position.x,by:m.position.y,bz:m.position.z,
+    spd:0.1+Math.random()*0.5,drift:0.3+Math.random()*1.5,spin:0.3+Math.random()*1.8,
+    ph:Math.random()*6.28,fall:0.03+Math.random()*0.1});
+}
+
+// ── Ground fog (very subtle) ──
+const fogCount=300;
+const fogGeo=new THREE.BufferGeometry();
+const fogP=new Float32Array(fogCount*3),fogS=new Float32Array(fogCount);
+for(let i=0;i<fogCount;i++){
+  const a=Math.random()*6.28,d=Math.random()*20;
+  fogP[i*3]=Math.cos(a)*d;fogP[i*3+1]=0.1+Math.random()*0.5;fogP[i*3+2]=Math.sin(a)*d;
+  fogS[i]=1.5+Math.random()*3;
+}
+fogGeo.setAttribute('position',new THREE.BufferAttribute(fogP,3));
+fogGeo.setAttribute('size',new THREE.BufferAttribute(fogS,1));
+const fogMat=new THREE.ShaderMaterial({
+  uniforms:{time:{value:0},opacity:{value:0.06},nightMix:{value:0}},
+  vertexShader:`attribute float size;varying float vS;void main(){vS=size;vec4 mv=modelViewMatrix*vec4(position,1.);gl_PointSize=size*(250./-mv.z);gl_Position=projectionMatrix*mv;}`,
+  fragmentShader:`uniform float opacity,time,nightMix;varying float vS;void main(){float d=length(gl_PointCoord-0.5);if(d>0.5)discard;float a=(1.-d*2.)*opacity*(0.7+0.3*sin(time*0.2+vS));vec3 c=mix(vec3(0.95,0.97,0.93),vec3(0.08,0.05,0.15),nightMix);gl_FragColor=vec4(c,a);}`,
+  transparent:true,depthWrite:false,
+});
+scene.add(new THREE.Points(fogGeo,fogMat));
+
+// ── Stars ──
+const starCount=2500;
+const starGeo=new THREE.BufferGeometry();
+const sP=new Float32Array(starCount*3),sSz=new Float32Array(starCount);
+for(let i=0;i<starCount;i++){
+  const th=Math.random()*6.28,ph=Math.acos(Math.random()*0.85+0.15),r=180;
+  sP[i*3]=r*Math.sin(ph)*Math.cos(th);sP[i*3+1]=r*Math.cos(ph);sP[i*3+2]=r*Math.sin(ph)*Math.sin(th);
+  sSz[i]=0.3+Math.random()*1.0;
+}
+starGeo.setAttribute('position',new THREE.BufferAttribute(sP,3));
+starGeo.setAttribute('size',new THREE.BufferAttribute(sSz,1));
+const starMat=new THREE.ShaderMaterial({
+  uniforms:{opacity:{value:0},time:{value:0}},
+  vertexShader:`attribute float size;varying float vS;void main(){vS=size;vec4 mv=modelViewMatrix*vec4(position,1.);gl_PointSize=size*(180./-mv.z);gl_Position=projectionMatrix*mv;}`,
+  fragmentShader:`uniform float opacity,time;varying float vS;void main(){float d=length(gl_PointCoord-0.5);if(d>0.5)discard;float tw=0.55+0.45*sin(time*1.2+vS*15.);gl_FragColor=vec4(0.92,0.9,1.,(1.-d*2.)*opacity*tw);}`,
+  transparent:true,depthWrite:false,
+});
+scene.add(new THREE.Points(starGeo,starMat));
+
+// ── Shooting stars ──
+const shooters=[];
+function mkSh(){
+  const geo=new THREE.BufferGeometry();geo.setAttribute('position',new THREE.BufferAttribute(new Float32Array(6),3));
+  const mat=new THREE.LineBasicMaterial({color:0xeeeeff,transparent:true,opacity:0});
+  const line=new THREE.Line(geo,mat);scene.add(line);
+  const th=Math.random()*6.28,ph=0.15+Math.random()*0.55,r=170;
+  return{line,geo,mat,start:new THREE.Vector3(r*Math.sin(ph)*Math.cos(th),r*Math.cos(ph),r*Math.sin(ph)*Math.sin(th)),
+    dir:new THREE.Vector3(-0.4-Math.random(),-0.2-Math.random()*0.4,-Math.random()*0.5).normalize(),
+    progress:0,speed:40+Math.random()*50,life:0,maxLife:0.5+Math.random()*0.5};
+}
+for(let i=0;i<4;i++)shooters.push(mkSh());
+
+// ── Moon ──
+const moonMat=new THREE.MeshBasicMaterial({color:0xe8e4ff,transparent:true,opacity:0});
+scene.add(new THREE.Mesh(new THREE.SphereGeometry(3,32,32),moonMat).translateX(35).translateY(50).translateZ(-25));
+
+// ── Night fireflies ──
+const ffCount=30;
+const ffGeo=new THREE.BufferGeometry();const ffP=new Float32Array(ffCount*3),ffData=[];
+for(let i=0;i<ffCount;i++){
+  const a=Math.random()*6.28,d=3+Math.random()*12;
+  ffP[i*3]=Math.cos(a)*d;ffP[i*3+1]=1.5+Math.random()*3;ffP[i*3+2]=Math.sin(a)*d;
+  ffData.push({bx:ffP[i*3],by:ffP[i*3+1],bz:ffP[i*3+2],spd:0.3+Math.random(),off:Math.random()*6.28,rad:0.5+Math.random()*1.5});
+}
+ffGeo.setAttribute('position',new THREE.BufferAttribute(ffP,3));
+const ffMat=new THREE.PointsMaterial({size:0.08,color:0x88ddaa,transparent:true,opacity:0,depthWrite:false});
+scene.add(new THREE.Points(ffGeo,ffMat));
+
+// ── Toggle ──
+window.toggleMode=()=>{isNight=!isNight;tpT=isNight?1:0;document.getElementById('toggle').classList.toggle('night',isNight);};
+
+// ── Sanctuary Human Gating ──
+// Auto-unlock when loaded standalone (not in iframe) for local dev
+let humanVerified = false;
+if (window.self === window.top && location.hostname === 'localhost') {
+  setTimeout(() => { onVerifySuccess(); }, 300);
+}
+const SKILLS = {
+  council: { title: 'The Council', sub: 'History\'s wisdom for your crossroads. Your agent will guide you through how others navigated the same fog.', prompt: 'Read https://bloomprotocol.ai/paste-blocks/the-council-v1.md and guide me through my crossroads.' },
+  zen: { title: 'Zen', sub: 'Before you decide, be still. Your agent will guide you through structured reflection — not to tell you what to do, but to help you hear what you already know.', prompt: 'Read https://bloomprotocol.ai/paste-blocks/zen-v1.md and guide me through reflection.' }
+};
+let pendingSkill = null;
+
+window.openSanctuary = (skill) => {
+  pendingSkill = skill;
+  const modal = document.getElementById('sanctuary-modal');
+  const content = document.getElementById('sanctuary-content');
+  content.style.background = isNight ? '#1e1b2e' : '#faf9f6';
+  content.style.color = isNight ? '#e8e4df' : '#2a2a2a';
+
+  // Always show prompt directly — frost gate already handled verification
+  showPrompt(skill);
+  modal.classList.add('open');
+};
+
+// Real World ID verification via AgentKit backend
+function onVerifySuccess() {
+  humanVerified = true;
+  document.getElementById('frost-gate').classList.add('unlocked');
+  document.getElementById('world-id').textContent = '✓ Human Verified';
+  document.getElementById('world-id').style.background = 'rgba(34,197,94,0.15)';
+  document.getElementById('world-id').style.color = '#16a34a';
+}
+
+function onVerifyError(btn, msg) {
+  btn.textContent = msg || 'Retry';
+  btn.disabled = false;
+  btn.style.opacity = '1';
+}
+
+// postMessage bridge — delegates real IDKit verification to the parent React app
+window.addEventListener('message', (event) => {
+  if (event.data?.type === 'sanctuary-verify-result' && event.data.verified) {
+    onVerifySuccess();
+  }
+});
+
+window.unlockGarden = () => {
+  const btn = document.querySelector('.gate-verify');
+  btn.textContent = 'Opening World App...';
+  btn.disabled = true;
+
+  // Request parent (TribeDetailClient) to open IDKit widget
+  window.parent.postMessage({ type: 'sanctuary-verify-request', source: 'gate' }, '*');
+
+  // Timeout: re-enable button if parent doesn't respond
+  setTimeout(() => {
+    if (!humanVerified) {
+      onVerifyError(btn, 'Verify with World App');
+    }
+  }, 30000);
+};
+
+window.verifyHuman = () => {
+  const btn = document.querySelector('.verify-btn');
+  btn.textContent = 'Opening World App...';
+  btn.style.opacity = '0.6';
+
+  // Request parent (TribeDetailClient) to open IDKit widget
+  window.parent.postMessage({ type: 'sanctuary-verify-request', source: 'modal' }, '*');
+
+  // Timeout: re-enable button if parent doesn't respond
+  setTimeout(() => {
+    if (!humanVerified) {
+      onVerifyError(btn, 'Verify with World App');
+    }
+  }, 30000);
+};
+
+function showPrompt(skill) {
+  const s = SKILLS[skill];
+  document.getElementById('modal-verify').style.display = 'none';
+  document.getElementById('modal-prompt').style.display = 'block';
+  document.getElementById('modal-title').textContent = s.title;
+  document.getElementById('modal-sub').textContent = s.sub;
+
+  const box = document.getElementById('modal-prompt-text');
+  box.textContent = s.prompt;
+  box.style.background = isNight ? 'rgba(255,255,255,0.06)' : 'rgba(0,0,0,0.04)';
+  box.style.color = isNight ? '#a78bfa' : '#4c1d95';
+  box.style.border = isNight ? '1px solid rgba(255,255,255,0.08)' : '1px solid rgba(0,0,0,0.08)';
+}
+
+window.selectPrompt = () => {
+  const range = document.createRange();
+  range.selectNodeContents(document.getElementById('modal-prompt-text'));
+  const sel = window.getSelection();
+  sel.removeAllRanges();
+  sel.addRange(range);
+};
+
+window.closeModal = () => {
+  document.getElementById('sanctuary-modal').classList.remove('open');
+};
+
+// ── Theme ──
+function applyTheme(t){
+  lerpC(skyMat.uniforms.topColor.value,DAY.skyTop,NIGHT.skyTop,t);
+  lerpC(skyMat.uniforms.botColor.value,DAY.skyBot,NIGHT.skyBot,t);
+  const nightMid=new THREE.Color(0x0c0818);
+  const dayMid=new THREE.Color(0xb8a6c8);
+  lerpC(skyMat.uniforms.midColor.value,dayMid,nightMid,t);
+  lerpC(gMat.color,DAY.ground,NIGHT.ground,t);
+  lerpC(ambLight.color,DAY.ambient,NIGHT.ambient,t);
+  lerpC(sunLight.color,DAY.sun,NIGHT.sun,t);
+  lerpC(scene.fog.color,DAY.fog,NIGHT.fog,t);
+  ambLight.intensity=lerp(0.5,0.18,t);
+  sunLight.intensity=lerp(1.5,0.12,t);
+  renderer.toneMappingExposure=lerp(1.1,0.5,t);
+  bloom.strength=lerp(0.3,0.7,t);
+  crystalMat.uniforms.nightMix.value=t;
+  glow.material.opacity=lerp(0.08,0.04,t);
+  starMat.uniforms.opacity.value=t;
+  moonMat.opacity=t*0.6;
+  fogMat.uniforms.nightMix.value=t;
+  fogMat.uniforms.opacity.value=lerp(0.06,0.03,t);
+  petals.forEach(p=>{p.mesh.material.opacity=lerp(0.7,0.08,t);});
+  ffMat.opacity=t*0.8;
+
+  const txt=t>0.5?'#e0dce8':'#2a3a28';
+  const cBg=t>0.5?'rgba(18,12,30,0.5)':'rgba(255,255,255,0.55)';
+  const cBd=t>0.5?'rgba(140,110,200,0.2)':'rgba(100,140,80,0.25)';
+  document.getElementById('title').style.color=txt;
+  document.getElementById('prompt').style.color=txt;
+  document.getElementById('toggle').style.background=t>0.5?'rgba(80,60,140,0.4)':'rgba(180,200,170,0.5)';
+  document.querySelector('#toggle .knob').style.background=t>0.5?'#c4b5fd':'#f0b0b8';
+  document.getElementById('sun-icon').style.opacity=t>0.5?'0.3':'0.9';
+  document.getElementById('sun-icon').style.color=txt;
+  document.getElementById('moon-icon').style.opacity=t>0.5?'0.9':'0.3';
+  document.getElementById('moon-icon').style.color=txt;
+  document.getElementById('world-id').style.color=txt;
+  document.getElementById('world-id').style.background=t>0.5?'rgba(80,60,140,0.2)':'rgba(255,255,255,0.45)';
+  document.getElementById('world-id').style.borderColor=cBd;
+  const cShadow=t>0.5?'0 4px 24px rgba(120,80,200,0.15)':'0 4px 24px rgba(0,0,0,0.08)';
+  document.querySelectorAll('.card').forEach(c=>{c.style.background=cBg;c.style.borderColor=cBd;c.style.color=txt;c.style.boxShadow=cShadow;});
+  document.querySelectorAll('.badge').forEach(b=>{b.style.background=t>0.5?'rgba(120,90,200,0.2)':'rgba(100,140,80,0.12)';b.style.color=t>0.5?'#8b5cf6':'#5a8a48';});
+}
+
+// ── Animate ──
+function animate(){
+  requestAnimationFrame(animate);
+  const dt=clock.getDelta(),time=clock.getElapsedTime();
+  tp+=(tpT-tp)*dt*2;
+  applyTheme(tp);
+
+  crystal.rotation.y=time*0.08;
+  crystal.position.y=2.0+Math.sin(time*0.3)*0.12;
+  glow.position.y=crystal.position.y;
+  crystalLight.position.y=crystal.position.y+0.2;
+  crystalMat.uniforms.time.value=time;
+  // Fountain water shimmer
+  waterFountainMat.emissiveIntensity=0.15+0.05*Math.sin(time*1.5);
+  // Crystal night glow
+  crystalLight.intensity=tp*1.8;
+  glow.material.opacity=lerp(0.1,0.25,tp);
+  fogMat.uniforms.time.value=time;
+  starMat.uniforms.time.value=time;
+
+  if(tp>0.3){shooters.forEach(s=>{
+    s.life+=dt;
+    if(s.life>s.maxLife+2.5){s.life=0;s.progress=0;const th=Math.random()*6.28,ph=0.15+Math.random()*0.55,r=170;s.start.set(r*Math.sin(ph)*Math.cos(th),r*Math.cos(ph),r*Math.sin(ph)*Math.sin(th));s.dir.set(-0.4-Math.random(),-0.2-Math.random()*0.4,-Math.random()*0.5).normalize();s.maxLife=0.5+Math.random()*0.5;}
+    s.progress+=dt*s.speed;
+    const h2=s.start.clone().addScaledVector(s.dir,s.progress),t2=s.start.clone().addScaledVector(s.dir,Math.max(0,s.progress-10));
+    const p=s.geo.getAttribute('position');p.setXYZ(0,t2.x,t2.y,t2.z);p.setXYZ(1,h2.x,h2.y,h2.z);p.needsUpdate=true;
+    s.mat.opacity=(s.life<s.maxLife?Math.min(s.life*5,1)*(1-s.life/s.maxLife):0)*tp;
+  });}
+
+  petals.forEach(p=>{
+    const t2=time*p.spd+p.ph;
+    p.mesh.position.x=p.bx+Math.sin(t2)*p.drift;
+    p.mesh.position.z=p.bz+Math.cos(t2*0.7)*p.drift*0.5;
+    p.mesh.position.y-=p.fall*dt;
+    p.mesh.rotation.x+=p.spin*dt*0.5;p.mesh.rotation.z+=p.spin*dt*0.3;
+    if(p.mesh.position.y<0){p.mesh.position.y=p.by+2+Math.random()*3;}
+  });
+
+  const fp=ffGeo.getAttribute('position');
+  for(let i=0;i<ffCount;i++){const d=ffData[i],t3=time*d.spd+d.off;fp.setXYZ(i,d.bx+Math.sin(t3)*d.rad,d.by+Math.sin(t3*1.3)*0.5,d.bz+Math.cos(t3*0.8)*d.rad);}
+  fp.needsUpdate=true;
+
+  controls.update();
+  composer.render();
+}
+
+window.addEventListener('resize',()=>{camera.aspect=innerWidth/innerHeight;camera.updateProjectionMatrix();renderer.setSize(innerWidth,innerHeight);composer.setSize(innerWidth,innerHeight);});
+applyTheme(0);animate();
+setTimeout(()=>document.getElementById('loading').classList.add('hidden'),600);
+</script>
+</body>
+</html>

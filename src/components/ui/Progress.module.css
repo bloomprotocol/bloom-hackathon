@@ -1,0 +1,97 @@
+/* 进度条根元素 */
+.root {
+  --progress-height: 8px;
+  --progress-bg: #e9ecef;
+  --progress-color: #90d446;
+  position: relative;
+  width: 100%;
+}
+
+/* 进度条轨道 */
+.track {
+  position: relative;
+  overflow: hidden;
+  width: 100%;
+  height: var(--progress-height);
+  border-radius: 8px;
+  background-color: var(--progress-bg);
+}
+
+/* 添加边框样式以匹配全局样式 */
+:global(.progressbar).root .track::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  bottom: 0;
+  right: 0;
+  border: 1px solid #dad9e5;
+  border-radius: 8px;
+  z-index: 0;
+}
+
+/* 进度条填充部分 */
+.bar {
+  position: absolute;
+  top: 0;
+  left: 0;
+  height: 100%;
+  border-radius: 8px;
+  background-image: linear-gradient(to right, #ee82f2, #fcbcff);
+  background-size: cover;
+  transition: width 0.2s ease;
+}
+
+/* 让进度条颜色更匹配原设计 */
+:global(.progressbar) .bar {
+  background-image: linear-gradient(to right, #ee82f2, #fcbcff);
+  background-size: 100% 100%;
+}
+
+/* 尺寸变体 */
+.size-xs {
+  --progress-height: 3px;
+}
+
+.size-sm {
+  --progress-height: 4.5px;
+}
+
+.size-md {
+  --progress-height: 8px;
+}
+
+.size-lg {
+  --progress-height: 9px;
+}
+
+.size-xl {
+  --progress-height: 16px;
+}
+
+/* 确保进度条有正确的文本颜色 - 修复为合法的CSS Module写法 */
+.progressLabel {
+  color: #434952 !important;
+}
+
+.progressbar {
+  position: relative;
+  display: flex;
+  --progress-color: #90d446;
+  overflow: visible;
+  border-radius: 8px;
+}
+
+.progress-label {
+  width: 46px;
+  height: 30px;
+  line-height: 24px;
+  position: absolute;
+  top: -36px;
+  overflow: visible;
+  margin-left: -25px;
+  background-size: 100% auto;
+  font-weight: bold;
+  font-size: 12px;
+  color: #434952 !important;
+}

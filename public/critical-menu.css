@@ -1,0 +1,118 @@
+/* Critical menu styles that must load first */
+.menu-container {
+  padding-top: 20px !important;
+  padding-bottom: 20px !important;
+  padding-left: 16px !important;
+  padding-right: 16px !important;
+  height: 12vh !important;
+  display: flex !important;
+  flex-direction: column !important;
+  justify-content: center !important;
+  max-width: 1440px !important;
+  margin: 0 auto !important;
+}
+
+.menu-inner {
+  display: flex !important;
+  justify-content: space-between !important;
+  align-items: center !important;
+}
+
+.menu-connect-button {
+  display: inline-block !important;
+  height: 40px !important;
+  line-height: 40px !important;
+  text-decoration: none !important;
+  padding: 0 16px !important;
+  border: none !important;
+  outline: none !important;
+  border-radius: 20px !important;
+  font-weight: bold !important;
+  min-width: 70px !important;
+}
+
+.menu-link-cta {
+  background-color: #2D174A !important;
+  color: #fff !important;
+}
+
+.menu-processing {
+  background-color: #C496FF !important;
+  color: #FFFFFF !important;
+}
+
+.menu-authenticated {
+  background-color: #8E38FF !important;
+  color: #fff !important;
+}
+
+.menu-x-button {
+  margin-right: 12px !important;
+  width: 40px !important;
+  height: 40px !important;
+  border-radius: 50% !important;
+  border: 1px solid rgba(0, 0, 0, 0.2) !important;
+  background-color: transparent !important;
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+}
+
+/* Add highest specificity selectors to override any potential conflicts */
+html body .menu-container {
+  padding-top: 20px !important;
+  padding-bottom: 20px !important;
+  padding-left: 16px !important;
+  padding-right: 16px !important;
+  height: 12vh !important;
+  display: flex !important;
+  flex-direction: column !important;
+  justify-content: center !important;
+  max-width: 1440px !important;
+  margin: 0 auto !important;
+}
+
+html body .menu-inner {
+  display: flex !important;
+  justify-content: space-between !important;
+  align-items: center !important;
+}
+
+html body .menu-connect-button {
+  display: inline-block !important;
+  height: 40px !important;
+  line-height: 40px !important;
+  text-decoration: none !important;
+  padding: 0 16px !important;
+  border: none !important;
+  outline: none !important;
+  border-radius: 20px !important;
+  font-weight: bold !important;
+}
+
+html body .menu-link-cta {
+  background-color: #2D174A !important;
+  color: #fff !important;
+}
+
+html body .menu-processing {
+  background-color: #C496FF !important;
+  color: #FFFFFF !important;
+}
+
+html body .menu-authenticated {
+  background-color: #8E38FF !important;
+  color: #fff !important;
+}
+
+html body .menu-x-button {
+  margin-right: 12px !important;
+  width: 40px !important;
+  height: 40px !important;
+  border-radius: 50% !important;
+  border: 1px solid rgba(0, 0, 0, 0.2) !important;
+  background-color: transparent !important;
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+} 

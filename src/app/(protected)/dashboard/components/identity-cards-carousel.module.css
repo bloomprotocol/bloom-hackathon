@@ -1,0 +1,51 @@
+/* 3D Carousel Container */
+.carouselContainer {
+  perspective: 1500px;
+  perspective-origin: center;
+  transform-style: preserve-3d;
+}
+
+/* Card transform optimization */
+.carouselCard {
+  transform-style: preserve-3d;
+  backface-visibility: hidden;
+  will-change: transform, opacity;
+}
+
+/* Mobile optimizations */
+@media (max-width: 1279px) {
+  .carouselContainer {
+    perspective: 1000px;
+  }
+
+  /* Show only center and immediate neighbors on mobile */
+  .carouselCard[data-far="true"] {
+    display: none;
+  }
+}
+
+/* Smooth transitions */
+.carouselCard {
+  transition: transform 0.5s cubic-bezier(0.4, 0, 0.2, 1),
+              opacity 0.5s cubic-bezier(0.4, 0, 0.2, 1),
+              filter 0.3s ease;
+}
+
+/* Add subtle shadow for depth */
+.carouselCard:not([data-active="true"]) {
+  filter: brightness(0.95);
+}
+
+.carouselCard[data-active="true"] {
+  filter: brightness(1);
+}
+
+/* Breathe animation for "Tap to view" hint */
+@keyframes breathe {
+  0%, 100% {
+    opacity: 0.5;
+  }
+  50% {
+    opacity: 1;
+  }
+}

@@ -1,0 +1,302 @@
+/* JourneyTimeline.module.css */
+.container {
+    position: relative; /* Establishes positioning context for absolute children */
+    z-index: 1; /* Ensures container stays above background elements */
+    display: flex; /* Creates flex container for vertical layout */
+    flex-direction: column; /* Stack children vertically */
+    padding: 0 20px 20px; /* Internal spacing on x-axis and bottom */
+    max-width: 600px; /* Limits container width for readability */
+    margin: 0 auto; /* Centers container horizontally */
+    opacity: 0; /* Initial state for fade-in animation */
+    animation: fadeIn 0.8s ease-out forwards; /* Smooth fade-in entrance */
+    /* height: 88vh; */ /* Commented out - was used to set viewport height */
+  }
+  
+  @keyframes fadeIn {
+    to { opacity: 1; } /* Fades element from 0 to full opacity */
+  }
+  
+  /* Back button */
+  .backButton {
+    position: relative; /* Normal document flow positioning */
+    width: fit-content; /* Button width matches content */
+    margin-top: 32px; /* Space from previous element */
+    display: flex; /* Flex container for icon and text */
+    align-items: center; /* Vertically centers icon with text */
+    text-align: center; /* Centers text within button */
+    gap: 8px; /* Space between icon and text */
+    background: transparent; /* No background color */
+    backdrop-filter: blur(10px); /* Blurs content behind button */
+    border: none; /* Removes default button border */
+    border-radius: 20px; /* Rounded corners */
+    padding: 10px 20px; /* Internal spacing */
+    color: #797878; /* Gray text color */
+    font-size: 14px; /* Text size */
+    cursor: pointer; /* Shows clickable hand cursor */
+    transition: all 0.3s ease; /* Smooth transition for hover effects */
+    z-index: 10; /* Ensures button stays above other elements */
+    opacity: 0; /* Initially hidden */
+    transform: translateY(20px); /* Starts shifted down */
+  }
+  
+  .backButton.show {
+    opacity: 1; /* Fully visible when shown */
+    transform: translateY(0); /* Slides to normal position */
+    animation: backButtonFadeIn 0.6s ease-out forwards; /* Smooth fade-in animation */
+  }
+  
+  @keyframes backButtonFadeIn {
+    from {
+      opacity: 0; /* Starts invisible */
+      transform: translateY(20px); /* Starts shifted down */
+    }
+    to {
+      opacity: 1; /* Ends fully visible */
+      transform: translateY(0); /* Ends in normal position */
+    }
+  }
+  
+  .backButton:hover {
+    background: rgba(30, 30, 40, 0.9); /* Dark semi-transparent background on hover */
+    border-color: rgba(255, 100, 200, 0.3); /* Pink border color on hover */
+    color: #fff; /* White text on hover */
+    transform: translateX(-5px); /* Slides left on hover */
+  }
+  
+  .backButton svg {
+    transition: transform 0.3s ease; /* Smooth transition for arrow movement */
+  }
+  
+  .backButton:hover svg {
+    transform: translateX(-3px); /* Arrow slides left on button hover */
+  }
+  
+  /* Header */
+  .header {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    text-align: center; /* Centers all text content */
+    height: 12vh;
+     /* Space below header */
+    opacity: 0; /* Initial state for animation */
+    animation: fadeIn 0.8s ease-out forwards; /* Fades in on load */
+  }
+  
+  .header h1 {
+    font-size: 24px; /* Main title size */
+    font-weight: 300; /* Light font weight */
+    margin-bottom: 8px; /* Space below title */
+    background: linear-gradient(135deg, #bfdbfe, #2563eb); /* Pink to purple gradient */
+    -webkit-background-clip: text; /* Clips gradient to text (webkit) */
+    -webkit-text-fill-color: transparent; /* Makes text transparent to show gradient (webkit) */
+    background-clip: text; /* Clips gradient to text (standard) */
+  }
+  
+  .header p {
+    color: #FFF; /* Gray subtitle color */
+    font-size: 14px; /* Subtitle text size */
+  }
+  
+  /* Timeline */
+  .timeline {
+    flex: none; /* Doesn't grow or shrink in flex container */
+    position: relative; /* Positioning context for progress line */
+    display: flex; /* Flex container for timeline items */
+    flex-direction: column; /* Stack timeline items vertically */
+    gap: 32px; /* Space between timeline items */
+    padding: 20px 0; /* Vertical padding */
+  }
+  
+  /* Progress line */
+  .progressLine {
+    position: absolute; /* Positioned relative to timeline */
+    left: 20px; /* Distance from left edge */
+    top: 0; /* Starts at top */
+    bottom: 0; /* Extends to bottom */
+    width: 2px; /* Thin vertical line */
+    background: rgba(255,255,255,0.1); /* Light gray line */
+    z-index: 0; /* Behind timeline markers */
+  }
+  
+  .progressFill {
+    position: absolute; /* Positioned within progress line */
+    left: 0; /* Aligned to left of parent */
+    top: 0; /* Starts at top */
+    width: 100%; /* Full width of parent */
+    background: linear-gradient(180deg, #ff6b9d, #c99dff); /* Pink to purple gradient */
+    transform-origin: top; /* Scale animation starts from top */
+    transform: scaleY(0); /* Initially hidden (0 height) */
+    animation: fillProgress 7s ease-out 1s forwards; /* Animated fill effect */
+  }
+  
+  @keyframes fillProgress {
+    to { transform: scaleY(1); } /* Scales from 0 to full height */
+  }
+  
+  /* Day markers */
+  .dayMarker {
+    position: relative; /* Normal positioning */
+    padding-left: 50px; /* Space for timeline dot and line */
+    opacity: 0; /* Initially hidden */
+    transform: translateX(-20px); /* Starts shifted left */
+    transition: all 0.5s ease-out; /* Smooth transition for active state */
+  }
+  
+  .dayMarker.active {
+    opacity: 1; /* Fully visible when active */
+    transform: translateX(0); /* Slides to normal position */
+  }
+  
+  .dayMarker::before {
+    content: ''; /* Creates pseudo-element */
+    position: absolute; /* Positioned relative to dayMarker */
+    left: 11px; /* Horizontal position for dot */
+    top: 8px; /* Vertical position for dot */
+    width: 18px; /* Dot size */
+    height: 18px; /* Dot size */
+    background: #1a1a2e; /* Dark background color */
+    border: 2px solid rgba(255,255,255,0.2); /* Light border */
+    border-radius: 50%; /* Makes it circular */
+    z-index: 1; /* Above progress line */
+    transition: all 0.5s ease; /* Smooth transition for active state */
+  }
+  
+  .dayMarker.active::before {
+    background: linear-gradient(135deg, #bfdbfe, #2563eb); /* Gradient fill when active */
+    
+    box-shadow: 0 0 15px #2563eb; /* Pink glow effect */
+    transform: scale(1.2); /* Slightly larger when active */
+  }
+  
+  /* Day content elements */
+  .dayLabel {
+    font-size: 11px; /* Small text size */
+    color: #666; /* Gray color */
+    text-transform: uppercase; /* All caps */
+    letter-spacing: 1px; /* Spaced letters */
+    margin-bottom: 4px; /* Space below label */
+    transition: color 0.3s ease; /* Smooth color transition */
+    opacity: 0; /* Initially hidden for animation */
+    transform: translateY(10px); /* Starts shifted down */
+  }
+  
+  .dayMarker.active .dayLabel {
+    color: #bfdbfe; /* Pink color when active */
+    animation: elementFadeIn 0.5s ease-out forwards; /* Fade and slide in */
+  }
+  
+  .dayEvent {
+    font-size: 16px; /* Main event text size */
+    color: #ffffff;
+    font-weight: 500; /* Medium weight */
+    margin-bottom: 8px; /* Space below event */
+    opacity: 0; /* Initially hidden for animation */
+    transform: translateY(10px); /* Starts shifted down */
+  }
+  
+  .dayMarker.active .dayEvent {
+    animation: elementFadeIn 0.5s ease-out 0.2s forwards; /* Delayed fade in */
+  }
+  
+  .dayMetrics {
+    display: flex; /* Horizontal layout for metrics */
+    gap: 15px; /* Space between metrics */
+    font-size: 12px; /* Small text size */
+    color: #ffffff; /* Gray color */
+  }
+  
+  .metric {
+    display: flex; /* Horizontal layout for icon and text */
+    align-items: center; /* Vertically centers content */
+    gap: 5px; /* Space between icon and text */
+    opacity: 0; /* Initially hidden for animation */
+    transform: translateY(10px); /* Starts shifted down */
+  }
+  
+  .dayMarker.active .metric:nth-child(1) {
+    animation: elementFadeIn 0.5s ease-out 0.3s forwards; /* First metric animation */
+  }
+  
+  .dayMarker.active .metric:nth-child(2) {
+    animation: elementFadeIn 0.5s ease-out 0.4s forwards; /* Second metric animation */
+  }
+  
+  @keyframes elementFadeIn {
+    to {
+      opacity: 1; /* Fades to full visibility */
+      transform: translateY(0); /* Slides to normal position */
+    }
+  }
+  
+  .metricHighlight {
+    color: #6bcf7f; /* Green color for important metrics */
+    font-weight: 600; /* Bold weight for emphasis */
+  }
+  
+  /* Signup section */
+  .signupSection {
+    position: relative; /* Normal positioning */
+    background: rgba(20, 20, 30, 0.95); /* Dark semi-transparent background */
+    backdrop-filter: blur(20px); /* Strong blur effect */
+    border-radius: 20px; /* Rounded corners */
+    padding: 20px; /* Internal spacing */
+    text-align: center; /* Centers all content */
+    transform: translateY(120%); /* Starts below viewport */
+    opacity: 0; /* Initially hidden */
+    transition: all 0.6s ease-out; /* Smooth slide-up animation */
+  }
+  
+  .signupSection.show {
+    transform: translateY(0); /* Slides to normal position */
+    opacity: 1; /* Fully visible */
+  }
+  
+  .signupTitle {
+    font-size: 18px; /* Title text size */
+    margin-bottom: 15px; /* Space below title */
+    background: linear-gradient(135deg, #bfdbfe, #2563eb); /* Pink to purple gradient */
+    -webkit-background-clip: text; /* Clips gradient to text (webkit) */
+    -webkit-text-fill-color: transparent; /* Makes text transparent (webkit) */
+    background-clip: text; /* Clips gradient to text (standard) */
+  }
+  
+  .emailInput {
+    width: 100%; /* Full width of container */
+    padding: 14px 20px; /* Internal spacing */
+    background: rgba(255, 255, 255, 0.05); /* Very subtle white background */
+    border: 1px solid #2563eb; /* Pink border */
+    border-radius: 25px; /* Rounded input field */
+    color: white; /* White text color */
+    font-size: 14px; /* Input text size */
+    text-align: center; /* Centers placeholder and input text */
+    margin-bottom: 12px; /* Space below input */
+  }
+  
+  .emailInput::placeholder {
+    color: #666; /* Gray placeholder text */
+  }
+  
+  .emailInput:focus {
+    outline: none; /* Removes default focus outline */
+    background: rgba(255, 255, 255, 0.08); /* Slightly brighter on focus */
+    border-color: #bfdbfe; /* Brighter pink border on focus */
+  }
+  
+  .submitButton {
+    width: 100%; /* Full width of container */
+    padding: 14px 20px; /* Internal spacing */
+    background: linear-gradient(135deg, #ff6b9d, #c99dff); /* Pink to purple gradient */
+    border: none; /* No border */
+    border-radius: 25px; /* Rounded button */
+    color: white; /* White text */
+    font-size: 14px; /* Button text size */
+    font-weight: 600; /* Semi-bold text */
+    cursor: pointer; /* Shows clickable cursor */
+    transition: all 0.3s ease; /* Smooth transitions */
+  }
+  
+  .submitButton:active {
+    transform: scale(0.98); /* Slightly smaller when clicked */
+  }

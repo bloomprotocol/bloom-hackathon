@@ -1,0 +1,30 @@
+<svg preserveAspectRatio="none" width="100%" height="100%" overflow="visible" style="display: block;" viewBox="0 0 192 192" fill="none" xmlns="http://www.w3.org/2000/svg">
+<g id="Rectangle 1">
+<g filter="url(#filter0_i_3015_18072)">
+<path d="M0 79.2C0 46.2024 0 29.7035 8.40325 18.1374C11.1172 14.4021 14.4021 11.1172 18.1374 8.40325C29.7035 0 46.2024 0 79.2 0H112.8C145.798 0 162.296 0 173.863 8.40325C177.598 11.1172 180.883 14.4021 183.597 18.1374C192 29.7035 192 46.2024 192 79.2V112.8C192 145.798 192 162.296 183.597 173.863C180.883 177.598 177.598 180.883 173.863 183.597C162.296 192 145.798 192 112.8 192H79.2C46.2024 192 29.7035 192 18.1374 183.597C14.4021 180.883 11.1172 177.598 8.40325 173.863C0 162.296 0 145.798 0 112.8V79.2Z" fill="var(--fill-0, white)"/>
+<path d="M0 79.2C0 46.2024 0 29.7035 8.40325 18.1374C11.1172 14.4021 14.4021 11.1172 18.1374 8.40325C29.7035 0 46.2024 0 79.2 0H112.8C145.798 0 162.296 0 173.863 8.40325C177.598 11.1172 180.883 14.4021 183.597 18.1374C192 29.7035 192 46.2024 192 79.2V112.8C192 145.798 192 162.296 183.597 173.863C180.883 177.598 177.598 180.883 173.863 183.597C162.296 192 145.798 192 112.8 192H79.2C46.2024 192 29.7035 192 18.1374 183.597C14.4021 180.883 11.1172 177.598 8.40325 173.863C0 162.296 0 145.798 0 112.8V79.2Z" fill="url(#paint0_linear_3015_18072)"/>
+</g>
+<path d="M79.2002 1H112.8C129.321 1 141.632 1.00171 151.261 2.04492C160.87 3.0861 167.69 5.15503 173.274 9.21191C176.925 11.8641 180.136 15.0751 182.788 18.7256C186.845 24.3096 188.914 31.1296 189.955 40.7393C190.998 50.3681 191 62.6791 191 79.2002V112.8C191 129.321 190.998 141.632 189.955 151.261C188.914 160.87 186.845 167.69 182.788 173.274C180.136 176.925 176.925 180.136 173.274 182.788C167.69 186.845 160.87 188.914 151.261 189.955C141.632 190.998 129.321 191 112.8 191H79.2002C62.6791 191 50.3681 190.998 40.7393 189.955C31.1296 188.914 24.3096 186.845 18.7256 182.788C15.0751 180.136 11.8641 176.925 9.21191 173.274C5.15503 167.69 3.0861 160.87 2.04492 151.261C1.00171 141.632 1 129.321 1 112.8V79.2002C1 62.6791 1.00171 50.3681 2.04492 40.7393C3.0861 31.1296 5.15503 24.3096 9.21191 18.7256C11.8641 15.0751 15.0751 11.8641 18.7256 9.21191C24.3096 5.15503 31.1296 3.0861 40.7393 2.04492C50.3681 1.00171 62.6791 1 79.2002 1Z" stroke="url(#paint1_linear_3015_18072)" stroke-opacity="0.12" stroke-width="2"/>
+</g>
+<defs>
+<filter id="filter0_i_3015_18072" x="0" y="-12" width="192" height="204" filterUnits="userSpaceOnUse" color-interpolation-filters="sRGB">
+<feFlood flood-opacity="0" result="BackgroundImageFix"/>
+<feBlend mode="normal" in="SourceGraphic" in2="BackgroundImageFix" result="shape"/>
+<feColorMatrix in="SourceAlpha" type="matrix" values="0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 127 0" result="hardAlpha"/>
+<feMorphology radius="2" operator="dilate" in="SourceAlpha" result="effect1_innerShadow_3015_18072"/>
+<feOffset dy="-12"/>
+<feGaussianBlur stdDeviation="8"/>
+<feComposite in2="hardAlpha" operator="arithmetic" k2="-1" k3="1"/>
+<feColorMatrix type="matrix" values="0 0 0 0 1 0 0 0 0 1 0 0 0 0 1 0 0 0 0.32 0"/>
+<feBlend mode="normal" in2="shape" result="effect1_innerShadow_3015_18072"/>
+</filter>
+<linearGradient id="paint0_linear_3015_18072" x1="96" y1="0" x2="96" y2="192" gradientUnits="userSpaceOnUse">
+<stop offset="0.56" stop-opacity="0.09"/>
+<stop offset="1" stop-color="white" stop-opacity="0.12"/>
+</linearGradient>
+<linearGradient id="paint1_linear_3015_18072" x1="96" y1="0" x2="96" y2="192" gradientUnits="userSpaceOnUse">
+<stop stop-color="white"/>
+<stop offset="1"/>
+</linearGradient>
+</defs>
+</svg>

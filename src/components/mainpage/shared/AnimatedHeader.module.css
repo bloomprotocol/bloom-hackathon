@@ -1,0 +1,31 @@
+/* AnimatedHeader 共用樣式 */
+.header {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  text-align: center;
+  height: 12vh;
+  opacity: 0;
+  animation: fadeIn 0.8s ease-out forwards;
+}
+
+.title {
+  font-size: 24px;
+  font-weight: 300;
+  margin: 0;
+  margin-bottom: 8px;
+  /* gradient 通過內聯樣式設置 */
+}
+
+.subtitle {
+  color: #FFF;
+  font-size: 14px;
+  margin: 0;
+}
+
+@keyframes fadeIn {
+  to { 
+    opacity: 1;
+  }
+} 

@@ -1,0 +1,212 @@
+/* Transition wrapper - shared by both */
+.transitionWrapper {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100vh;
+  z-index: 100;
+  opacity: 1;
+  transition: transform 0.8s ease-out, opacity 0.8s ease-out;
+}
+
+.transitionWrapper.show {
+  /* Terminal is immediately visible */
+}
+
+.transitionWrapper.floatUp {
+  transform: translateY(-100px);
+}
+
+/* Framing text animations */
+.framingTextFadeIn {
+  opacity: 0;
+  animation: framingTextAppear 0.5s ease-out forwards;
+}
+
+.framingTextFadeOut {
+  opacity: 1;
+  animation: framingTextDisappear 0.5s ease-out forwards;
+}
+
+@keyframes framingTextAppear {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+@keyframes framingTextDisappear {
+  from { opacity: 1; }
+  to { opacity: 0; }
+}
+
+/* Sequential line animations */
+.line1 {
+  opacity: 0;
+  animation: fadeInLine 0.3s ease-out forwards;
+}
+
+.line2 {
+  opacity: 0;
+  animation: fadeInLine 0.3s ease-out 0.1s forwards;
+}
+
+.line3 {
+  opacity: 0;
+  animation: fadeInLine 0.3s ease-out 0.2s forwards;
+}
+
+.line4 {
+  opacity: 0;
+  animation: fadeInLine 0.3s ease-out 0.3s forwards;
+}
+
+.line5 {
+  opacity: 0;
+  animation: fadeInLine 0.3s ease-out 0.4s forwards;
+}
+
+.line6 {
+  opacity: 0;
+  animation: fadeInLine 0.3s ease-out 0.5s forwards;
+}
+
+@keyframes fadeInLine {
+  to {
+    opacity: 1;
+  }
+}
+
+/* Output text - legacy support */
+.output {
+  /* Handled by line animations */
+}
+
+/* USER RPG-SPECIFIC STYLES */
+
+/* Sacred geometry - ripples */
+.sacredGeometry {
+  position: fixed;
+  width: 1px;
+  height: 1px;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 2s ease;
+  z-index: 999;
+}
+
+.sacredGeometry.reveal {
+  opacity: 1;
+}
+
+.rippleContainer {
+  position: absolute;
+  width: 2000px;
+  height: 2000px;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+}
+
+.geometryRing {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  max-width: 2000px;
+  max-height: 2000px;
+  border: 1px solid;
+  border-radius: 50%;
+  transform-origin: center;
+  transform: translate(-50%, -50%) scale(0);
+  left: 50%;
+  top: 50%;
+  opacity: 0;
+}
+
+/* Neon colors for ripples */
+.neon-purple {
+  border-color: #bf40ff;
+}
+
+.neon-pink {
+  border-color: #ff10f0;
+}
+
+.neon-blue {
+  border-color: #00d4ff;
+}
+
+.neon-green {
+  border-color: #39ff14;
+}
+
+.neon-yellow {
+  border-color: #ffff00;
+}
+
+.neon-orange {
+  border-color: #ff6600;
+}
+
+/* Ripple animation */
+.geometryRing.ripple {
+  animation: rippleExpand 3s ease-out forwards;
+}
+
+@keyframes rippleExpand {
+  0% {
+    transform: translate(-50%, -50%) scale(0.05);
+    opacity: 0;
+    border-width: 3px;
+  }
+  10% {
+    opacity: 0.8;
+    border-width: 2.5px;
+  }
+  50% {
+    border-width: 1.5px;
+  }
+  70% {
+    opacity: 0.4;
+    border-width: 1px;
+  }
+  100% {
+    transform: translate(-50%, -50%) scale(2);
+    opacity: 0.05;
+    border-width: 0.5px;
+  }
+}
+
+/* Emergence text */
+.emergenceText {
+  position: absolute;
+  bottom: 20%;
+  left: 50%;
+  transform: translateX(-50%);
+  font-family: -apple-system, BlinkMacSystemFont, sans-serif;
+  font-size: 12px;
+  font-weight: 200;
+  letter-spacing: 6px;
+  text-transform: uppercase;
+  color: rgb(255, 255, 255);
+  opacity: 0;
+  transition: all 2s ease;
+}
+
+.emergenceText.show {
+  opacity: 1;
+}
+
+/* Final fade */
+.sceneFade {
+  position: fixed;
+  width: 100%;
+  height: 100%;
+  background: #000;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.8s ease;
+}
+
+.sceneFade.active {
+  opacity: 1;
+} 

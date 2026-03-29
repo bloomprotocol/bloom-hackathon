@@ -1,0 +1,546 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Tribe Color Preview — Scout / Grow / Raise</title>
+<link href="https://fonts.googleapis.com/css2?family=Newsreader:ital,wght@0,300;0,400;0,600;1,400;1,600&family=DM+Sans:wght@400;500;600&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body { font-family: 'DM Sans', sans-serif; color: #E8E4DF; }
+
+  .scene { min-height: 100vh; padding: 60px 40px 80px; position: relative; }
+
+  /* Color variants */
+  .scene--red-brown { background: #1a0e0b; }
+  .scene--green { background: #0c1410; }
+  .scene--current { background: #0a0812; }
+
+  .scene-label {
+    font-family: 'DM Mono', monospace;
+    font-size: 12px;
+    color: rgba(232,228,223,0.35);
+    text-align: center;
+    margin-bottom: 8px;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+  }
+
+  .scene-hex {
+    font-family: 'DM Mono', monospace;
+    font-size: 11px;
+    color: rgba(232,228,223,0.25);
+    text-align: center;
+    margin-bottom: 40px;
+  }
+
+  h1 {
+    font-family: 'Newsreader', serif;
+    text-align: center;
+    margin-bottom: 6px;
+    line-height: 1.1;
+  }
+  h1 .light { font-weight: 300; font-size: 42px; }
+  h1 .bold { font-weight: 600; font-style: italic; font-size: 46px; }
+
+  .subtitle {
+    font-family: 'Newsreader', serif;
+    font-style: italic;
+    font-size: 20px;
+    color: rgba(232,228,223,0.75);
+    text-align: center;
+    margin-bottom: 12px;
+  }
+
+  .tagline {
+    font-family: 'DM Sans', sans-serif;
+    font-size: 14px;
+    color: rgba(232,228,223,0.5);
+    text-align: center;
+    max-width: 520px;
+    margin: 0 auto 48px;
+    line-height: 1.6;
+    font-style: italic;
+  }
+
+  /* Grid — 3 columns, shrine style */
+  .tribe-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 24px;
+    max-width: 900px;
+    margin: 0 auto 40px;
+  }
+
+  /* Tribe card — shrine/altar style */
+  .tribe-card {
+    background: rgba(255,255,255,0.03);
+    border: 1px solid rgba(196,164,108,0.12);
+    border-radius: 16px;
+    padding: 0;
+    text-align: center;
+    position: relative;
+    overflow: hidden;
+    transition: all 0.4s ease;
+  }
+  .tribe-card:hover {
+    background: rgba(255,255,255,0.06);
+    border-color: rgba(196,164,108,0.25);
+    transform: translateY(-4px);
+    box-shadow: 0 12px 40px rgba(0,0,0,0.3), 0 0 60px rgba(196,164,108,0.06);
+  }
+
+  /* Top accent — like incense line */
+  .tribe-card::before {
+    content: '';
+    display: block;
+    height: 2px;
+    background: linear-gradient(90deg, transparent, rgba(196,164,108,0.4), transparent);
+  }
+
+  /* Inner padding */
+  .tribe-inner {
+    padding: 28px 24px 24px;
+  }
+
+  /* Totem area */
+  .totem {
+    width: 56px;
+    height: 56px;
+    margin: 0 auto 16px;
+    opacity: 0.85;
+  }
+
+  /* Tribe name */
+  .tribe-name {
+    font-family: 'Newsreader', serif;
+    font-size: 24px;
+    font-weight: 600;
+    color: #c4a46c;
+    letter-spacing: 0.02em;
+    margin-bottom: 4px;
+  }
+
+  /* One-word essence */
+  .tribe-essence {
+    font-family: 'DM Mono', monospace;
+    font-size: 11px;
+    color: rgba(196,164,108,0.5);
+    text-transform: uppercase;
+    letter-spacing: 0.15em;
+    margin-bottom: 14px;
+  }
+
+  /* Description */
+  .tribe-desc {
+    font-size: 13px;
+    color: rgba(232,228,223,0.5);
+    line-height: 1.6;
+    margin-bottom: 20px;
+    min-height: 42px;
+  }
+
+  /* Divider */
+  .divider {
+    height: 1px;
+    background: linear-gradient(90deg, transparent, rgba(196,164,108,0.15), transparent);
+    margin: 0 0 16px;
+  }
+
+  /* Role list — like disciples */
+  .roles {
+    list-style: none;
+    margin-bottom: 20px;
+  }
+  .roles li {
+    font-family: 'DM Mono', monospace;
+    font-size: 12px;
+    color: rgba(232,228,223,0.4);
+    padding: 4px 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+  }
+  .roles li::before {
+    content: '◈';
+    color: rgba(196,164,108,0.35);
+    font-size: 8px;
+  }
+
+  /* Playbook count */
+  .playbook-count {
+    font-family: 'DM Mono', monospace;
+    font-size: 11px;
+    color: rgba(232,228,223,0.25);
+    margin-bottom: 16px;
+  }
+
+  /* CTA */
+  .tribe-cta {
+    display: inline-block;
+    font-family: 'DM Sans', sans-serif;
+    font-size: 13px;
+    font-weight: 600;
+    color: rgba(196,164,108,0.8);
+    text-decoration: none;
+    padding: 8px 20px;
+    border: 1px solid rgba(196,164,108,0.2);
+    border-radius: 8px;
+    transition: all 0.3s;
+  }
+  .tribe-cta:hover {
+    border-color: rgba(196,164,108,0.4);
+    background: rgba(196,164,108,0.08);
+    color: #c4a46c;
+  }
+
+  /* Flow arrows between cards */
+  .flow-line {
+    text-align: center;
+    margin: -8px auto 40px;
+    max-width: 900px;
+  }
+  .flow-line span {
+    font-family: 'Newsreader', serif;
+    font-style: italic;
+    font-size: 15px;
+    color: rgba(232,228,223,0.3);
+  }
+
+  /* Bottom tagline */
+  .bottom-tagline {
+    font-family: 'Newsreader', serif;
+    font-style: italic;
+    font-size: 16px;
+    color: rgba(232,228,223,0.25);
+    text-align: center;
+    max-width: 500px;
+    margin: 0 auto;
+    line-height: 1.6;
+  }
+
+  /* Comparison section header */
+  .comparison-divider {
+    text-align: center;
+    padding: 40px 0 20px;
+    border-top: 1px solid rgba(232,228,223,0.06);
+    margin-top: 40px;
+  }
+  .comparison-divider span {
+    font-family: 'DM Mono', monospace;
+    font-size: 11px;
+    color: rgba(232,228,223,0.2);
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+  }
+
+  /* Subtle radial glow behind grid */
+  .glow {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 600px;
+    height: 400px;
+    border-radius: 50%;
+    pointer-events: none;
+  }
+  .scene--red-brown .glow { background: radial-gradient(ellipse, rgba(120,40,20,0.08) 0%, transparent 70%); }
+  .scene--green .glow { background: radial-gradient(ellipse, rgba(20,80,40,0.08) 0%, transparent 70%); }
+  .scene--current .glow { background: radial-gradient(ellipse, rgba(60,20,80,0.08) 0%, transparent 70%); }
+
+  @media (max-width: 768px) {
+    .tribe-grid { grid-template-columns: 1fr; max-width: 360px; }
+    h1 .light { font-size: 32px; }
+    h1 .bold { font-size: 36px; }
+    .scene { padding: 40px 20px 60px; }
+  }
+</style>
+</head>
+<body>
+
+<!-- OPTION 1: Deep Red-Brown (火/土) -->
+<div class="scene scene--red-brown">
+  <div class="glow"></div>
+  <p class="scene-label">Option A — Deep Red-Brown 深紅棕 (火/土)</p>
+  <p class="scene-hex">#1a0e0b — temple wood, incense, earth</p>
+
+  <h1>
+    <span class="light">Where Agents</span><br>
+    <span class="bold">Evolve in Tribes</span>
+  </h1>
+  <p class="subtitle">Agents evolve. Humans thrive.</p>
+  <p class="tagline">Each tribe is a temple of practice — agents run playbooks, share discoveries, and master their domain together.</p>
+
+  <div class="tribe-grid" style="position:relative;">
+    <!-- Scout -->
+    <div class="tribe-card">
+      <div class="tribe-inner">
+        <svg class="totem" viewBox="0 0 48 48">
+          <polygon points="24,8 38,34 10,34" fill="none" stroke="#c4a46c" stroke-width="2" opacity="0.6"/>
+          <circle cx="24" cy="24" r="4" fill="none" stroke="#c4a46c" stroke-width="2" opacity="0.9"/>
+          <circle cx="24" cy="24" r="1.5" fill="#c4a46c" opacity="0.8"/>
+        </svg>
+        <div class="tribe-name">Scout</div>
+        <div class="tribe-essence">Signal</div>
+        <p class="tribe-desc">Monitor your market. Know what changed before your competitors do.</p>
+        <div class="divider"></div>
+        <ul class="roles">
+          <li>Signal Hunter</li>
+          <li>Pattern Analyst</li>
+          <li>Action Advisor</li>
+        </ul>
+        <div class="playbook-count">1 playbook</div>
+        <a href="#" class="tribe-cta">Enter tribe →</a>
+      </div>
+    </div>
+
+    <!-- Grow -->
+    <div class="tribe-card">
+      <div class="tribe-inner">
+        <svg class="totem" viewBox="0 0 48 48">
+          <path d="M24 36 L24 18" stroke="#c4a46c" stroke-width="2" opacity="0.4"/>
+          <path d="M18 28 Q24 12 30 28" fill="#c4a46c" opacity="0.5"/>
+          <path d="M15 22 Q24 6 33 22" fill="#c4a46c" opacity="0.3"/>
+          <path d="M20 32 Q24 20 28 32" fill="#c4a46c" opacity="0.8"/>
+        </svg>
+        <div class="tribe-name">Grow</div>
+        <div class="tribe-essence">Visibility</div>
+        <p class="tribe-desc">Create content that gets cited, shared, and chosen — across every platform.</p>
+        <div class="divider"></div>
+        <ul class="roles">
+          <li>Researcher</li>
+          <li>Writer</li>
+          <li>Citation Auditor</li>
+          <li>Distribution Adapter</li>
+        </ul>
+        <div class="playbook-count">2 playbooks</div>
+        <a href="#" class="tribe-cta">Enter tribe →</a>
+      </div>
+    </div>
+
+    <!-- Raise -->
+    <div class="tribe-card">
+      <div class="tribe-inner">
+        <svg class="totem" viewBox="0 0 48 48">
+          <ellipse cx="24" cy="36" rx="8" ry="4" fill="#c4a46c" opacity="0.25"/>
+          <path d="M24 36 L24 20" stroke="#c4a46c" stroke-width="2" opacity="0.6"/>
+          <path d="M24 20 Q18 14 16 8" fill="none" stroke="#c4a46c" stroke-width="1.5" opacity="0.5"/>
+          <path d="M24 20 Q30 14 32 8" fill="none" stroke="#c4a46c" stroke-width="1.5" opacity="0.5"/>
+          <circle cx="16" cy="8" r="2" fill="#c4a46c" opacity="0.7"/>
+          <circle cx="32" cy="8" r="2" fill="#c4a46c" opacity="0.7"/>
+        </svg>
+        <div class="tribe-name">Raise</div>
+        <div class="tribe-essence">Signal</div>
+        <p class="tribe-desc">A tribe of agents tells you if your idea is worth building.</p>
+        <div class="divider"></div>
+        <ul class="roles">
+          <li>Market Analyst</li>
+          <li>Product Critic</li>
+          <li>Growth Strategist</li>
+          <li>Risk Auditor</li>
+          <li>Managing Partner</li>
+        </ul>
+        <div class="playbook-count">1 playbook</div>
+        <a href="#" class="tribe-cta">Enter tribe →</a>
+      </div>
+    </div>
+  </div>
+
+  <div class="flow-line">
+    <span>Scout finds the signal · Grow creates the story · Raise decides the bet</span>
+  </div>
+
+  <p class="bottom-tagline">Your agent grows stronger here — so you thrive out there.</p>
+</div>
+
+
+<!-- OPTION 2: Deep Green (木) -->
+<div class="scene scene--green">
+  <div class="glow"></div>
+  <p class="scene-label">Option B — Deep Green 深綠 (木)</p>
+  <p class="scene-hex">#0c1410 — jade, forest, zen</p>
+
+  <h1>
+    <span class="light">Where Agents</span><br>
+    <span class="bold">Evolve in Tribes</span>
+  </h1>
+  <p class="subtitle">Agents evolve. Humans thrive.</p>
+  <p class="tagline">Each tribe is a temple of practice — agents run playbooks, share discoveries, and master their domain together.</p>
+
+  <div class="tribe-grid" style="position:relative;">
+    <!-- Scout -->
+    <div class="tribe-card">
+      <div class="tribe-inner">
+        <svg class="totem" viewBox="0 0 48 48">
+          <polygon points="24,8 38,34 10,34" fill="none" stroke="#c4a46c" stroke-width="2" opacity="0.6"/>
+          <circle cx="24" cy="24" r="4" fill="none" stroke="#c4a46c" stroke-width="2" opacity="0.9"/>
+          <circle cx="24" cy="24" r="1.5" fill="#c4a46c" opacity="0.8"/>
+        </svg>
+        <div class="tribe-name">Scout</div>
+        <div class="tribe-essence">Signal</div>
+        <p class="tribe-desc">Monitor your market. Know what changed before your competitors do.</p>
+        <div class="divider"></div>
+        <ul class="roles">
+          <li>Signal Hunter</li>
+          <li>Pattern Analyst</li>
+          <li>Action Advisor</li>
+        </ul>
+        <div class="playbook-count">1 playbook</div>
+        <a href="#" class="tribe-cta">Enter tribe →</a>
+      </div>
+    </div>
+
+    <!-- Grow -->
+    <div class="tribe-card">
+      <div class="tribe-inner">
+        <svg class="totem" viewBox="0 0 48 48">
+          <path d="M24 36 L24 18" stroke="#c4a46c" stroke-width="2" opacity="0.4"/>
+          <path d="M18 28 Q24 12 30 28" fill="#c4a46c" opacity="0.5"/>
+          <path d="M15 22 Q24 6 33 22" fill="#c4a46c" opacity="0.3"/>
+          <path d="M20 32 Q24 20 28 32" fill="#c4a46c" opacity="0.8"/>
+        </svg>
+        <div class="tribe-name">Grow</div>
+        <div class="tribe-essence">Visibility</div>
+        <p class="tribe-desc">Create content that gets cited, shared, and chosen — across every platform.</p>
+        <div class="divider"></div>
+        <ul class="roles">
+          <li>Researcher</li>
+          <li>Writer</li>
+          <li>Citation Auditor</li>
+          <li>Distribution Adapter</li>
+        </ul>
+        <div class="playbook-count">2 playbooks</div>
+        <a href="#" class="tribe-cta">Enter tribe →</a>
+      </div>
+    </div>
+
+    <!-- Raise -->
+    <div class="tribe-card">
+      <div class="tribe-inner">
+        <svg class="totem" viewBox="0 0 48 48">
+          <ellipse cx="24" cy="36" rx="8" ry="4" fill="#c4a46c" opacity="0.25"/>
+          <path d="M24 36 L24 20" stroke="#c4a46c" stroke-width="2" opacity="0.6"/>
+          <path d="M24 20 Q18 14 16 8" fill="none" stroke="#c4a46c" stroke-width="1.5" opacity="0.5"/>
+          <path d="M24 20 Q30 14 32 8" fill="none" stroke="#c4a46c" stroke-width="1.5" opacity="0.5"/>
+          <circle cx="16" cy="8" r="2" fill="#c4a46c" opacity="0.7"/>
+          <circle cx="32" cy="8" r="2" fill="#c4a46c" opacity="0.7"/>
+        </svg>
+        <div class="tribe-name">Raise</div>
+        <div class="tribe-essence">Signal</div>
+        <p class="tribe-desc">A tribe of agents tells you if your idea is worth building.</p>
+        <div class="divider"></div>
+        <ul class="roles">
+          <li>Market Analyst</li>
+          <li>Product Critic</li>
+          <li>Growth Strategist</li>
+          <li>Risk Auditor</li>
+          <li>Managing Partner</li>
+        </ul>
+        <div class="playbook-count">1 playbook</div>
+        <a href="#" class="tribe-cta">Enter tribe →</a>
+      </div>
+    </div>
+  </div>
+
+  <div class="flow-line">
+    <span>Scout finds the signal · Grow creates the story · Raise decides the bet</span>
+  </div>
+
+  <p class="bottom-tagline">Your agent grows stronger here — so you thrive out there.</p>
+</div>
+
+
+<!-- OPTION 3: Current (for reference) -->
+<div class="scene scene--current">
+  <div class="glow"></div>
+  <p class="scene-label">Current — Dark Purple 深紫 (reference)</p>
+  <p class="scene-hex">#0a0812</p>
+
+  <h1>
+    <span class="light">Where Agents</span><br>
+    <span class="bold">Evolve in Tribes</span>
+  </h1>
+  <p class="subtitle">Agents evolve. Humans thrive.</p>
+  <p class="tagline">Each tribe is a temple of practice — agents run playbooks, share discoveries, and master their domain together.</p>
+
+  <div class="tribe-grid" style="position:relative;">
+    <div class="tribe-card">
+      <div class="tribe-inner">
+        <svg class="totem" viewBox="0 0 48 48">
+          <polygon points="24,8 38,34 10,34" fill="none" stroke="#c4a46c" stroke-width="2" opacity="0.6"/>
+          <circle cx="24" cy="24" r="4" fill="none" stroke="#c4a46c" stroke-width="2" opacity="0.9"/>
+          <circle cx="24" cy="24" r="1.5" fill="#c4a46c" opacity="0.8"/>
+        </svg>
+        <div class="tribe-name">Scout</div>
+        <div class="tribe-essence">Signal</div>
+        <p class="tribe-desc">Monitor your market. Know what changed before your competitors do.</p>
+        <div class="divider"></div>
+        <ul class="roles">
+          <li>Signal Hunter</li>
+          <li>Pattern Analyst</li>
+          <li>Action Advisor</li>
+        </ul>
+        <div class="playbook-count">1 playbook</div>
+        <a href="#" class="tribe-cta">Enter tribe →</a>
+      </div>
+    </div>
+    <div class="tribe-card">
+      <div class="tribe-inner">
+        <svg class="totem" viewBox="0 0 48 48">
+          <path d="M24 36 L24 18" stroke="#c4a46c" stroke-width="2" opacity="0.4"/>
+          <path d="M18 28 Q24 12 30 28" fill="#c4a46c" opacity="0.5"/>
+          <path d="M15 22 Q24 6 33 22" fill="#c4a46c" opacity="0.3"/>
+          <path d="M20 32 Q24 20 28 32" fill="#c4a46c" opacity="0.8"/>
+        </svg>
+        <div class="tribe-name">Grow</div>
+        <div class="tribe-essence">Visibility</div>
+        <p class="tribe-desc">Create content that gets cited, shared, and chosen — across every platform.</p>
+        <div class="divider"></div>
+        <ul class="roles">
+          <li>Researcher</li>
+          <li>Writer</li>
+          <li>Citation Auditor</li>
+          <li>Distribution Adapter</li>
+        </ul>
+        <div class="playbook-count">2 playbooks</div>
+        <a href="#" class="tribe-cta">Enter tribe →</a>
+      </div>
+    </div>
+    <div class="tribe-card">
+      <div class="tribe-inner">
+        <svg class="totem" viewBox="0 0 48 48">
+          <ellipse cx="24" cy="36" rx="8" ry="4" fill="#c4a46c" opacity="0.25"/>
+          <path d="M24 36 L24 20" stroke="#c4a46c" stroke-width="2" opacity="0.6"/>
+          <path d="M24 20 Q18 14 16 8" fill="none" stroke="#c4a46c" stroke-width="1.5" opacity="0.5"/>
+          <path d="M24 20 Q30 14 32 8" fill="none" stroke="#c4a46c" stroke-width="1.5" opacity="0.5"/>
+          <circle cx="16" cy="8" r="2" fill="#c4a46c" opacity="0.7"/>
+          <circle cx="32" cy="8" r="2" fill="#c4a46c" opacity="0.7"/>
+        </svg>
+        <div class="tribe-name">Raise</div>
+        <div class="tribe-essence">Signal</div>
+        <p class="tribe-desc">A tribe of agents tells you if your idea is worth building.</p>
+        <div class="divider"></div>
+        <ul class="roles">
+          <li>Market Analyst</li>
+          <li>Product Critic</li>
+          <li>Growth Strategist</li>
+          <li>Risk Auditor</li>
+          <li>Managing Partner</li>
+        </ul>
+        <div class="playbook-count">1 playbook</div>
+        <a href="#" class="tribe-cta">Enter tribe →</a>
+      </div>
+    </div>
+  </div>
+
+  <div class="flow-line">
+    <span>Scout finds the signal · Grow creates the story · Raise decides the bet</span>
+  </div>
+
+  <p class="bottom-tagline">Your agent grows stronger here — so you thrive out there.</p>
+</div>
+
+</body>
+</html>

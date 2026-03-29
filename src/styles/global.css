@@ -1,0 +1,754 @@
+@import "tailwindcss";
+@import "tw-animate-css";
+@import url('https://fonts.googleapis.com/css2?family=Hedvig+Letters+Serif:opsz@12..24&display=swap');
+
+@custom-variant dark (&:is(.dark *));
+
+/* 自定義響應式斷點 - Desktop >= 1280px, Mobile < 1280px */
+@custom-variant desktop (@media (min-width: 1280px));
+@custom-variant mobile (@media (max-width: 1279px));
+
+/* Tailwind CSS v4 主題配置 */
+@theme {
+  /* 顏色定義 */
+  --color-primary: rgba(144, 212, 70, 1);
+  /* #90d446 | 亮綠色 Green */
+  --color-secondary: rgba(132, 120, 224, 1);
+  /* #8478e0 | 紫色 Purple */
+  --color-grey: rgba(105, 111, 140, 1);
+  /* #696f8c | 灰色 Grey */
+  --color-dark: rgba(57, 63, 73, 1);
+  /* #393f49 | 深灰色 Dark */
+  --color-purple: rgba(132, 120, 224, 1);
+  /* #8478e0 | 紫色 Purple */
+  --color-greyLine: rgba(218, 217, 229, 1);
+  /* #dad9e5 | 淺灰線條 Grey Line */
+  --color-primaryText: rgba(67, 73, 82, 1);
+  /* #434952 | 主要文字色 Primary Text */
+
+  /* 自定義透明度變體 */
+  --color-white-30: rgba(255, 255, 255, 0.3);   /* #ffffff 30% | 白色半透明 */
+  --color-white-50: rgba(255, 255, 255, 0.5);   /* #ffffff 50% | 白色半透明 */
+  --color-white-70: rgba(255, 255, 255, 0.7);   /* #ffffff 70% | 白色半透明 */
+
+  /* UI Revamp: Yoona V2 */
+  /* Dashboard 組件樣式 */
+  --color-glass: rgba(255, 255, 255, 1);      /* Dashboard 卡片背景 */
+  --color-text-primary: rgba(57, 63, 73, 1);     /* #393f49 | 主標題文字 */
+  --color-text-secondary: rgba(105, 111, 140, 1); /* #696f8c | 次要文字 */
+
+  /* 斷點 */
+  --breakpoint-2k: 1440px;
+  --breakpoint-desktop: 1280px;
+
+  /* 最大寬度 */
+  --width-container-xxl: 1440px;
+  
+  /* Dashboard 組件尺寸 */
+  --width-card: 320px;                           /* Dashboard 側邊卡片寬度 */
+  --height-card: 621px;                          /* Dashboard 卡片高度 */
+
+  /* 字體 */
+  --font-family-sans: 'Outfit', system-ui, sans-serif;
+  --font-family-mono: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
+
+  /* 自定義字體 families */
+  --font-wix-madefor: var(--font-wix, 'Wix Madefor Display', sans-serif);
+
+  /* 自定義字體大小（可選，只在需要覆蓋預設值時使用） */
+  /* --font-size-xs: 0.75rem; */
+  /* --font-size-sm: 0.875rem; */
+  /* --font-size-base: 1rem; */
+  /* --font-size-lg: 1.125rem; */
+}
+
+/* 字体定义 - 移到 @layer 外面確保最高優先級 */
+
+@font-face {
+  font-family: "Gilkys";
+  src: url("https://statics.bloomprotocol.ai/fonts/Gilkys.ttf") format("woff");
+  font-weight: 400;
+  font-style: normal;
+  font-display: swap;
+}
+
+/* 基础样式重置 */
+@layer base {
+  /* 全局盒模型设置 */
+  *,
+  *::before,
+  *::after {
+    box-sizing: border-box;
+  }
+
+  /* 全局字體設置 - 使用繼承方式 */
+  html {
+    font-family: "Outfit", system-ui, sans-serif;
+    overflow-x: hidden;
+  }
+
+  body {
+    font-family: inherit;
+  }
+
+  body {
+    /* color: #393f49; */
+    background-image: url(https://statics.bloomprotocol.ai/images/body-light.jpg);
+    background-attachment: fixed;
+    background-position: center;
+    background-repeat: no-repeat;
+    background-size: cover;
+    overflow-x: hidden;
+  }
+
+  /* Prevent body scroll on project detail page for proper anchor navigation */
+  body:has(.project-detail-container) {
+    
+    height: 100vh;
+  }
+}
+
+/* 复杂组件样式 */
+@layer components {
+  /* 进度条组件 */
+  .progressbar {
+    position: relative;
+    overflow: visible;
+    border-radius: 0.5rem;
+  }
+
+  .progressbar::before {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    border: 1px solid #dad9e5;
+    border-radius: 0.5rem;
+  }
+
+  .progressbar.-top-4 {
+    background: none;
+  }
+
+  .progress-section {
+    position: static;
+    overflow: visible;
+    border-radius: 0.5rem;
+    background-image: linear-gradient(to right, #ee82f2, #fcbcff);
+    background-size: cover;
+  }
+
+  .progress-label {
+    position: absolute;
+    width: 46px;
+    height: 30px;
+    line-height: 24px;
+    top: -36px;
+    margin-left: -25px;
+    font-weight: bold;
+    font-size: 12px;
+    color: #434952;
+    background-size: 100% auto;
+  }
+
+  .progressbar-top {
+    overflow: hidden;
+  }
+
+  /* Accordion 组件样式 */
+  .accordion-root {
+    width: 100%;
+  }
+
+  .accordion-item {
+    overflow: hidden;
+    border-bottom: 1px solid #dad9e5;
+  }
+
+  .accordion-item:last-of-type {
+    border-bottom: none;
+  }
+
+  .accordion-control {
+    display: flex;
+    align-items: center;
+    width: 100%;
+    padding: 4px 0;
+    font-size: 16px;
+    font-weight: 500;
+    text-align: left;
+    background-color: transparent;
+    border: none;
+    cursor: pointer;
+    transition: background-color 0.2s ease;
+  }
+
+  .accordion-control-open {
+    font-weight: 600;
+  }
+
+  .accordion-control-disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+  }
+
+  .accordion-label {
+    flex: 1;
+    width: 100%;
+  }
+
+  .accordion-chevron {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-left: 0.5rem;
+    transition: transform 0.2s ease;
+  }
+
+  .accordion-control-open .accordion-chevron {
+    transform: rotate(180deg);
+  }
+
+  .accordion-panel {
+    padding: 0;
+    font-size: 0.875rem;
+    animation: accordionSlideDown 0.2s ease;
+  }
+
+  .accordion-panel-open {
+    display: block;
+  }
+}
+
+/* Homepage Animations */
+@keyframes blob {
+  0% {
+    transform: translate(0px, 0px) scale(1);
+  }
+  33% {
+    transform: translate(30px, -50px) scale(1.1);
+  }
+  66% {
+    transform: translate(-20px, 20px) scale(0.9);
+  }
+  100% {
+    transform: translate(0px, 0px) scale(1);
+  }
+}
+
+/* 特殊工具类 */
+@layer utilities {
+  /* 移除点击高亮 */
+  .no-tap-highlight {
+    -webkit-tap-highlight-color: transparent;
+  }
+  
+  /* Blob animations */
+  .animate-blob {
+    animation: blob 7s infinite;
+  }
+  
+  .animation-delay-2000 {
+    animation-delay: 2s;
+  }
+  
+  .animation-delay-4000 {
+    animation-delay: 4s;
+  }
+}
+
+/* 强制字体应用（仅在需要覆盖第三方组件时使用） */
+.force-display-font {
+  font-family: "Outfit", sans-serif !important;
+}
+
+/* 动画定义 */
+@keyframes accordionSlideDown {
+  from {
+    opacity: 0;
+    transform: translateY(-10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@theme inline {
+  --radius-sm: calc(var(--radius) - 4px);
+  --radius-md: calc(var(--radius) - 2px);
+  --radius-lg: var(--radius);
+  --radius-xl: calc(var(--radius) + 4px);
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
+  --color-card: var(--card);
+  --color-card-foreground: var(--card-foreground);
+  --color-popover: var(--popover);
+  --color-popover-foreground: var(--popover-foreground);
+  --color-primary: var(--primary);
+  --color-primary-foreground: var(--primary-foreground);
+  --color-secondary: var(--secondary);
+  --color-secondary-foreground: var(--secondary-foreground);
+  --color-muted: var(--muted);
+  --color-muted-foreground: var(--muted-foreground);
+  --color-accent: var(--accent);
+  --color-accent-foreground: var(--accent-foreground);
+  --color-destructive: var(--destructive);
+  --color-border: var(--border);
+  --color-input: var(--input);
+  --color-ring: var(--ring);
+  --color-chart-1: var(--chart-1);
+  --color-chart-2: var(--chart-2);
+  --color-chart-3: var(--chart-3);
+  --color-chart-4: var(--chart-4);
+  --color-chart-5: var(--chart-5);
+  --color-sidebar: var(--sidebar);
+  --color-sidebar-foreground: var(--sidebar-foreground);
+  --color-sidebar-primary: var(--sidebar-primary);
+  --color-sidebar-primary-foreground: var(--sidebar-primary-foreground);
+  --color-sidebar-accent: var(--sidebar-accent);
+  --color-sidebar-accent-foreground: var(--sidebar-accent-foreground);
+  --color-sidebar-border: var(--sidebar-border);
+  --color-sidebar-ring: var(--sidebar-ring);
+}
+
+/* UI Revamp: Yoona V2 */
+/* Dashboard 組件通用樣式 */
+@layer utilities {
+  /* Common container glass-morphism pattern - unified across all cards */
+  /* This style is the v2 UI designed in Aug-2025 by Yoona Chen */
+  .common-container-style {
+    @apply p-6 bg-white/50 shadow-[0px_6px_10px_-4px_rgba(0,0,0,0.12),0px_0px_0px_1px_rgba(0,0,0,0.05)] overflow-hidden rounded-[20px];
+    backdrop-filter: blur(5px);
+  }
+
+  /* Breadcrumb navigation style */
+  .breadcrumb-style {
+    @apply flex items-center gap-2 mb-6;
+    font-family: 'Outfit', sans-serif;
+  }
+
+  .breadcrumb-style .breadcrumb-link {
+    @apply text-[14px] text-[#696f8c] cursor-pointer hover:text-[#8478e0] transition-colors;
+  }
+
+  .breadcrumb-style .breadcrumb-separator {
+    @apply shrink-0 text-[#696f8c];
+  }
+
+  .breadcrumb-style .breadcrumb-current {
+    @apply text-[14px] font-medium text-[#393f49] truncate;
+  }
+  
+  /* Project Detail Page Component Patterns */
+  /* Project Section Card - Main content sections */
+  .project-section-card {
+    @apply p-5 bg-white rounded-xl shadow-[0px_0px_12px_0px_rgba(0,0,0,0.08)] flex flex-col justify-start items-start gap-4;
+  }
+  
+  /* Project Detail Page Component Patterns */
+  /* Common PDP Card Style - Unified style for all project detail page cards */
+  .common-pdp-card-style {
+    @apply bg-[rgba(255,255,255,0.5)] backdrop-blur-[5px] border border-neutral-200 box-border flex flex-col gap-4 items-start justify-start p-[20px] relative rounded-[20px] shadow-[0px_0px_12px_0px_rgba(0,0,0,0.08)] w-full;
+  }
+  
+  /* Project Detail Page Component Patterns */
+  /* Common PDP Card Title - Unified title style for project detail page cards */
+  .common-pdp-card-title {
+    @apply font-['Times'] font-bold not-italic relative shrink-0 text-[#393f49] text-[16px] w-full;
+  }
+  
+  /* Project Detail Page Component Patterns */
+  .common-pdp-card-title p {
+    @apply block leading-[1.2];
+  }
+  
+
+  /* Spotlight page Component Patterns */
+  /* Common PLP Card Style - Unified style for project list page cards (spotlight, discover, etc.) */
+  /* dashboard - hub - mission card is using */
+  .common-plp-card-style {
+    @apply bg-white/50 backdrop-blur-[5px] border border-neutral-200 shadow-[0px_0px_0px_1px_rgba(0,0,0,0.05)] shadow-[0px_6px_10px_-4px_rgba(0,0,0,0.12)] p-4 rounded-2xl cursor-pointer hover:bg-white/60 transition-all relative flex flex-col;
+  }
+  
+  /* Discover page Component Patterns */
+  /* Common Discover Card Style - Specific style for discover page cards */
+  .common-discover-card-style {
+    @apply bg-[rgba(255,255,255,0.5)] box-border content-stretch flex flex-col gap-3 desktop:gap-4 items-center justify-start overflow-clip p-[16px] desktop:p-[20px] relative rounded-2xl shadow-[0px_0px_12px_0px_rgba(0,0,0,0.08)] shrink-0 w-full;
+  }
+  
+  /* Modal Title Text - Unified style for all modal titles */
+  .modal-title-text {
+    @apply font-['Times'] font-bold text-[20px] text-[#393F49];
+  }
+  
+  /* Dashboard Button Patterns */
+  /* Primary action button - Approve, Send, Post */
+  .btn-primary-action {
+    @apply h-7 px-3 py-2 text-[12px] font-semibold text-[#393f49] bg-[#e7e6f2] rounded-[27px] shadow-[0px_3px_0px_-1px_#393f49] hover:shadow-[0px_2px_0px_-1px_#393f49] hover:translate-y-[1px] transition-all leading-none disabled:opacity-50 disabled:cursor-not-allowed;
+  }
+  
+  /* Secondary action button - Cancel, Reject, Reply */
+  .btn-secondary-action {
+    @apply h-7 px-3 py-2 text-[12px] font-semibold text-[#393f49] bg-white rounded-[27px] border-2 border-[#dad9e5] shadow-[0px_3px_0px_-1px_#393f49] hover:shadow-[0px_2px_0px_-1px_#393f49] hover:translate-y-[1px] transition-all leading-none;
+  }
+}
+
+:root {
+  --radius: 0.625rem;
+  --background: oklch(1 0 0);
+  --foreground: oklch(0.145 0 0);
+  --card: oklch(1 0 0);
+  --card-foreground: oklch(0.145 0 0);
+  --popover: oklch(1 0 0);
+  --popover-foreground: oklch(0.145 0 0);
+  --primary: oklch(0.205 0 0);
+  --primary-foreground: oklch(0.985 0 0);
+  --secondary: oklch(0.97 0 0);
+  --secondary-foreground: oklch(0.205 0 0);
+  --muted: oklch(0.97 0 0);
+  --muted-foreground: oklch(0.556 0 0);
+  --accent: oklch(0.97 0 0);
+  --accent-foreground: oklch(0.205 0 0);
+  --destructive: oklch(0.577 0.245 27.325);
+  --border: oklch(0.922 0 0);
+  --input: oklch(0.922 0 0);
+  --ring: oklch(0.708 0 0);
+  --chart-1: oklch(0.646 0.222 41.116);
+  --chart-2: oklch(0.6 0.118 184.704);
+  --chart-3: oklch(0.398 0.07 227.392);
+  --chart-4: oklch(0.828 0.189 84.429);
+  --chart-5: oklch(0.769 0.188 70.08);
+  --sidebar: oklch(0.985 0 0);
+  --sidebar-foreground: oklch(0.145 0 0);
+  --sidebar-primary: oklch(0.205 0 0);
+  --sidebar-primary-foreground: oklch(0.985 0 0);
+  --sidebar-accent: oklch(0.97 0 0);
+  --sidebar-accent-foreground: oklch(0.205 0 0);
+  --sidebar-border: oklch(0.922 0 0);
+  --sidebar-ring: oklch(0.708 0 0);
+}
+
+.dark {
+  --background: oklch(0.145 0 0);
+  --foreground: oklch(0.985 0 0);
+  --card: oklch(0.205 0 0);
+  --card-foreground: oklch(0.985 0 0);
+  --popover: oklch(0.205 0 0);
+  --popover-foreground: oklch(0.985 0 0);
+  --primary: oklch(0.922 0 0);
+  --primary-foreground: oklch(0.205 0 0);
+  --secondary: oklch(0.269 0 0);
+  --secondary-foreground: oklch(0.985 0 0);
+  --muted: oklch(0.269 0 0);
+  --muted-foreground: oklch(0.708 0 0);
+  --accent: oklch(0.269 0 0);
+  --accent-foreground: oklch(0.985 0 0);
+  --destructive: oklch(0.704 0.191 22.216);
+  --border: oklch(1 0 0 / 10%);
+  --input: oklch(1 0 0 / 15%);
+  --ring: oklch(0.556 0 0);
+  --chart-1: oklch(0.488 0.243 264.376);
+  --chart-2: oklch(0.696 0.17 162.48);
+  --chart-3: oklch(0.769 0.188 70.08);
+  --chart-4: oklch(0.627 0.265 303.9);
+  --chart-5: oklch(0.645 0.246 16.439);
+  --sidebar: oklch(0.205 0 0);
+  --sidebar-foreground: oklch(0.985 0 0);
+  --sidebar-primary: oklch(0.488 0.243 264.376);
+  --sidebar-primary-foreground: oklch(0.985 0 0);
+  --sidebar-accent: oklch(0.269 0 0);
+  --sidebar-accent-foreground: oklch(0.985 0 0);
+  --sidebar-border: oklch(1 0 0 / 10%);
+  --sidebar-ring: oklch(0.556 0 0);
+}
+
+@layer base {
+  * {
+    @apply border-border outline-ring/50;
+  }
+  body {
+    @apply bg-background text-foreground;
+  }
+}
+
+/* Cute bounce animation for buttons */
+@keyframes shake {
+  0%, 100% {
+    transform: translate(0, 0);
+  }
+  25% {
+    transform: translate(3px, 3px);
+  }
+  50% {
+    transform: translate(-1px, -1px);
+  }
+  75% {
+    transform: translate(2px, 2px);
+  }
+}
+
+.shake-animation {
+  animation: shake 0.4s cubic-bezier(0.36, 0.07, 0.19, 0.97) both;
+  transform-origin: center;
+}
+
+/* Animated border glow effect */
+.animated-border-glow {
+  position: relative;
+  padding: 2px;
+  border-radius: 12px;
+  background: rgba(105, 111, 140, 0.5);
+  overflow: hidden;
+}
+
+/* 跑道进度条效果 */
+.animated-border-glow::before {
+  content: '';
+  position: absolute;
+  width: 40px;
+  height: 2px;
+  background: rgba(144, 212, 70, 1);
+  box-shadow: 0 0 10px rgba(144, 212, 70, 0.8);
+  animation: runAroundBorder 4s linear infinite;
+}
+
+/* 内层内容 */
+.animated-border-glow > div {
+  position: relative;
+  background: white;
+  border-radius: 11px;
+  z-index: 1;
+}
+
+/* 沿着边框跑的动画 */
+@keyframes runAroundBorder {
+  0% {
+    top: 0;
+    left: 0;
+    width: 40px;
+    height: 2px;
+  }
+  25% {
+    top: 0;
+    left: calc(100% - 2px);
+    width: 2px;
+    height: 40px;
+  }
+  50% {
+    top: calc(100% - 2px);
+    left: calc(100% - 40px);
+    width: 40px;
+    height: 2px;
+  }
+  75% {
+    top: calc(100% - 40px);
+    left: 0;
+    width: 2px;
+    height: 40px;
+  }
+  100% {
+    top: 0;
+    left: 0;
+    width: 40px;
+    height: 2px;
+  }
+}
+
+/* Spoiler effect - Animated dots style */
+.spoiler-wrapper {
+  cursor: pointer;
+  display: inline-block;
+  vertical-align: baseline;
+}
+
+.spoiler-container {
+  position: relative;
+  display: inline-block;
+  overflow: hidden;
+  background-color: transparent;
+  border-radius: 24px;
+  padding: 4px 12px;
+}
+
+.spoiler-dots {
+  position: absolute;
+  inset: -15px;
+  transition: opacity 0.8s ease;
+}
+
+.spoiler-dot {
+  position: absolute;
+  width: 2px;
+  height: 2px;
+  background-color: #696F8C;
+  border-radius: 50%;
+  opacity: 0;
+  animation-name: dotAnimation;
+  animation-timing-function: ease-in-out;
+  animation-iteration-count: infinite;
+}
+
+@keyframes dotAnimation {
+  0% { 
+    opacity: 0; 
+    transform: translate(var(--x-start), var(--y-start)); 
+  }
+  40% { 
+    opacity: 0.8; 
+  }
+  60% { 
+    opacity: 0.8; 
+    transform: translate(var(--x-end), var(--y-end)); 
+  }
+  100% { 
+    opacity: 0; 
+    transform: translate(var(--x-start), var(--y-start)); 
+  }
+}
+
+.spoiler-text {
+  position: relative;
+  display: inline-block;
+  opacity: 0;
+  transform: scale(0.95);
+  transition: opacity 0.6s ease, transform 0.5s ease;
+  pointer-events: none;
+  color: #696F8C;
+  font-weight: 500;
+}
+
+/* For permanent spoiler (never reveals) */
+.spoiler-container.revealed .spoiler-dots {
+  opacity: 0;
+}
+
+.spoiler-container.revealed .spoiler-text {
+  opacity: 1;
+  transform: scale(1);
+}
+
+/* 自定義媒體查詢工具類 */
+@layer utilities {
+  /* 隱藏滾動條 */
+  .scrollbar-hide {
+    -ms-overflow-style: none;  /* IE and Edge */
+    scrollbar-width: none;  /* Firefox */
+  }
+  .scrollbar-hide::-webkit-scrollbar {
+    display: none;  /* Chrome, Safari and Opera */
+  }
+  .scrollbar-thin {
+    scrollbar-width: thin;  /* Firefox */
+    scrollbar-color: rgba(139,92,246,0.25) transparent;
+  }
+  .scrollbar-thin::-webkit-scrollbar {
+    height: 2px;
+  }
+  .scrollbar-thin::-webkit-scrollbar-track {
+    background: transparent;
+  }
+  .scrollbar-thin::-webkit-scrollbar-thumb {
+    background: rgba(139,92,246,0.2);
+    border-radius: 3px;
+  }
+  .scrollbar-thin::-webkit-scrollbar-thumb:hover {
+    background: rgba(139,92,246,0.4);
+  }
+  @media (min-width: 1280px) {
+    .desktop\:px-40 {
+      padding-left: 10rem;
+      padding-right: 10rem;
+    }
+    .desktop\:px-6 {
+      padding-left: 1.5rem;
+      padding-right: 1.5rem;
+    }
+    .desktop\:py-4 {
+      padding-top: 1rem;
+      padding-bottom: 1rem;
+    }
+    .desktop\:mb-8 {
+      margin-bottom: 2rem;
+    }
+    .desktop\:gap-6 {
+      gap: 1.5rem;
+    }
+    .desktop\:text-4xl {
+      font-size: 2.25rem;
+      line-height: 2.5rem;
+    }
+    .desktop\:text-\[28px\] {
+      font-size: 28px;
+    }
+    .desktop\:text-\[14px\] {
+      font-size: 14px;
+    }
+    .desktop\:grid-cols-4 {
+      grid-template-columns: repeat(4, minmax(0, 1fr));
+    }
+    .desktop\:p-6 {
+      padding: 1.5rem;
+    }
+    .desktop\:gap-4 {
+      gap: 1rem;
+    }
+    .desktop\:gap-0 {
+      gap: 0;
+    }
+    .desktop\:gap-8 {
+      gap: 2rem;
+    }
+    .desktop\:flex-row {
+      flex-direction: row;
+    }
+    .desktop\:items-center {
+      align-items: center;
+    }
+    .desktop\:justify-between {
+      justify-content: space-between;
+    }
+    .desktop\:p-4 {
+      padding: 1rem;
+    }
+    .desktop\:p-3 {
+      padding: 0.75rem;
+    }
+    .desktop\:mb-4 {
+      margin-bottom: 1rem;
+    }
+    .desktop\:mb-3 {
+      margin-bottom: 0.75rem;
+    }
+    .desktop\:gap-3 {
+      gap: 0.75rem;
+    }
+  }
+}
+
+/* Shake animation for Connect Wallet button */
+@keyframes shake {
+  0%, 100% { transform: translateX(0); }
+  10%, 30%, 50%, 70%, 90% { transform: translateX(-4px); }
+  20%, 40%, 60%, 80% { transform: translateX(4px); }
+}
+
+.animate-shake {
+  animation: shake 0.6s ease-in-out;
+}
+
+/* Dots animation for "Connecting..." */
+@keyframes dots {
+  0%, 20% { content: '.'; }
+  40% { content: '..'; }
+  60%, 100% { content: '...'; }
+}
+
+.animate-dots::after {
+  content: '...';
+  animation: dots 1.5s infinite;
+}
+
+

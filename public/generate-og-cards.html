@@ -1,0 +1,296 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Generate Twitter OG Cards - 1200x630</title>
+    <style>
+        body {
+            margin: 0;
+            padding: 40px;
+            background: #f3f4f6;
+            font-family: system-ui, -apple-system, sans-serif;
+        }
+        .header {
+            max-width: 1200px;
+            margin: 0 auto 40px;
+            padding: 20px;
+            background: white;
+            border-radius: 8px;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+        }
+        h1 { margin: 0 0 10px 0; }
+        .instructions {
+            background: #dbeafe;
+            padding: 15px;
+            border-radius: 6px;
+            margin-top: 15px;
+        }
+        .instructions ol { margin: 10px 0; padding-left: 20px; }
+        .card-container {
+            margin-bottom: 60px;
+        }
+        .card-label {
+            text-align: center;
+            margin-bottom: 20px;
+        }
+        .card-label h2 { margin: 0 0 5px 0; }
+        .card-label code {
+            background: #e5e7eb;
+            padding: 4px 8px;
+            border-radius: 4px;
+            font-size: 14px;
+        }
+        .og-card {
+            width: 1200px;
+            height: 630px;
+            margin: 0 auto;
+            border-radius: 24px;
+            overflow: hidden;
+            position: relative;
+            box-shadow: 0 20px 40px rgba(0,0,0,0.2);
+        }
+        .og-card .bg-texture {
+            position: absolute;
+            inset: 0;
+            opacity: 0.3;
+        }
+        .og-card .overlay {
+            position: absolute;
+            inset: 0;
+            background: rgba(0,0,0,0.2);
+        }
+        .og-card .content {
+            position: relative;
+            z-index: 10;
+            height: 100%;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 0 64px;
+        }
+        .hero-image {
+            width: 400px;
+            height: 500px;
+            border-radius: 16px;
+            overflow: hidden;
+            box-shadow: 0 20px 40px rgba(0,0,0,0.3);
+            background: rgba(255,255,255,0.1);
+            backdrop-filter: blur(8px);
+        }
+        .hero-image img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+        .text-content {
+            flex: 1;
+            margin-left: 64px;
+            color: white;
+        }
+        .personality-name {
+            font-family: 'Georgia', serif;
+            font-size: 60px;
+            font-weight: bold;
+            margin-bottom: 24px;
+            line-height: 1.1;
+        }
+        .tagline {
+            font-family: 'Georgia', serif;
+            font-size: 32px;
+            font-style: italic;
+            opacity: 0.9;
+            margin-bottom: 32px;
+            line-height: 1.3;
+        }
+        .description {
+            font-family: 'Courier New', monospace;
+            font-size: 20px;
+            opacity: 0.85;
+            margin-bottom: 40px;
+            line-height: 1.6;
+            max-width: 600px;
+        }
+        .badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            margin-bottom: 24px;
+            padding-bottom: 16px;
+            border-bottom: 1px solid rgba(255,255,255,0.2);
+        }
+        .badge .emoji { font-size: 32px; }
+        .badge .text {
+            font-size: 18px;
+            opacity: 0.8;
+        }
+        .logo-section {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            opacity: 0.9;
+        }
+        .logo-section .logo-img {
+            height: 40px;
+            width: auto;
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <h1>🎨 Twitter OG Card Generator</h1>
+        <p>Size: <strong>1200 × 630 pixels</strong></p>
+        <div class="instructions">
+            <strong>📸 How to capture:</strong>
+            <ol>
+                <li>Right-click on a card below</li>
+                <li>Select "Inspect" or "Inspect Element"</li>
+                <li>In DevTools, find the div with <code>id="og-visionary"</code> etc.</li>
+                <li>Right-click that div → "Capture node screenshot"</li>
+                <li>Save to <code>public/og/[personality].png</code></li>
+            </ol>
+        </div>
+    </div>
+
+    <!-- Visionary -->
+    <div class="card-container">
+        <div class="card-label">
+            <h2>💜 The Visionary</h2>
+            <code>visionary.png</code>
+        </div>
+        <div id="og-visionary" class="og-card" style="background: linear-gradient(135deg, #d8b4fe, #e9d5ff);">
+            <div class="overlay"></div>
+            <div class="content">
+                <div class="hero-image">
+                    <img src="identity/visionary-agent.png" alt="Visionary" onerror="this.style.background='rgba(147,51,234,0.3)'">
+                </div>
+                <div class="text-content">
+                    <div class="personality-name">The Visionary</div>
+                    <div class="tagline">"See beyond the hype"</div>
+                    <div class="description">You back bold ideas before they're obvious. Conviction drives you to see potential where others see risk.</div>
+                    <div class="badge">
+                        <span class="emoji">🦞</span>
+                        <span class="text">via OpenClaw</span>
+                    </div>
+                    <div class="logo-section">
+                        <img src="identity/bloom-logo.png" alt="Bloom" class="logo-img">
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Explorer -->
+    <div class="card-container">
+        <div class="card-label">
+            <h2>💚 The Explorer</h2>
+            <code>explorer.png</code>
+        </div>
+        <div id="og-explorer" class="og-card" style="background: linear-gradient(135deg, #86efac, #bbf7d0);">
+            <div class="overlay"></div>
+            <div class="content">
+                <div class="hero-image">
+                    <img src="identity/explorer-agent.png" alt="Explorer" onerror="this.style.background='rgba(16,185,129,0.3)'">
+                </div>
+                <div class="text-content">
+                    <div class="personality-name">The Explorer</div>
+                    <div class="tagline">"Never stop discovering"</div>
+                    <div class="description">You explore widely, always curious about what's next. You don't commit deeply—you sample, discover, and move on.</div>
+                    <div class="badge">
+                        <span class="emoji">🦞</span>
+                        <span class="text">via OpenClaw</span>
+                    </div>
+                    <div class="logo-section">
+                        <img src="identity/bloom-logo.png" alt="Bloom" class="logo-img">
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Cultivator -->
+    <div class="card-container">
+        <div class="card-label">
+            <h2>🩵 The Cultivator</h2>
+            <code>cultivator.png</code>
+        </div>
+        <div id="og-cultivator" class="og-card" style="background: linear-gradient(135deg, #67e8f9, #a5f3fc);">
+            <div class="overlay"></div>
+            <div class="content">
+                <div class="hero-image">
+                    <img src="identity/cultivator-agent.png" alt="Cultivator" onerror="this.style.background='rgba(6,182,212,0.3)'">
+                </div>
+                <div class="text-content">
+                    <div class="personality-name">The Cultivator</div>
+                    <div class="tagline">"Grow what you believe in"</div>
+                    <div class="description">You help projects grow through feedback and community building. You're the supporter every builder dreams of.</div>
+                    <div class="badge">
+                        <span class="emoji">🦞</span>
+                        <span class="text">via OpenClaw</span>
+                    </div>
+                    <div class="logo-section">
+                        <img src="identity/bloom-logo.png" alt="Bloom" class="logo-img">
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Optimizer -->
+    <div class="card-container">
+        <div class="card-label">
+            <h2>🧡 The Optimizer</h2>
+            <code>optimizer.png</code>
+        </div>
+        <div id="og-optimizer" class="og-card" style="background: linear-gradient(135deg, #fdba74, #fed7aa);">
+            <div class="overlay"></div>
+            <div class="content">
+                <div class="hero-image">
+                    <img src="identity/optimizer-agent.png" alt="Optimizer" onerror="this.style.background='rgba(249,115,22,0.3)'">
+                </div>
+                <div class="text-content">
+                    <div class="personality-name">The Optimizer</div>
+                    <div class="tagline">"Always leveling up"</div>
+                    <div class="description">There's always a better way. You don't settle—you iterate, improve, and optimize until it's right.</div>
+                    <div class="badge">
+                        <span class="emoji">🦞</span>
+                        <span class="text">via OpenClaw</span>
+                    </div>
+                    <div class="logo-section">
+                        <img src="identity/bloom-logo.png" alt="Bloom" class="logo-img">
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Innovator -->
+    <div class="card-container">
+        <div class="card-label">
+            <h2>💙 The Innovator</h2>
+            <code>innovator.png</code>
+        </div>
+        <div id="og-innovator" class="og-card" style="background: linear-gradient(135deg, #93c5fd, #bfdbfe);">
+            <div class="overlay"></div>
+            <div class="content">
+                <div class="hero-image">
+                    <img src="identity/innovator-agent.png" alt="Innovator" onerror="this.style.background='rgba(59,130,246,0.3)'">
+                </div>
+                <div class="text-content">
+                    <div class="personality-name">The Innovator</div>
+                    <div class="tagline">"First to back new tech"</div>
+                    <div class="description">You spot emerging tech before it breaks through. While others wait for proof, you're already backing the future.</div>
+                    <div class="badge">
+                        <span class="emoji">🦞</span>
+                        <span class="text">via OpenClaw</span>
+                    </div>
+                    <div class="logo-section">
+                        <img src="identity/bloom-logo.png" alt="Bloom" class="logo-img">
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+</body>
+</html>

@@ -1,0 +1,207 @@
+/**
+ * Bloom Protocol Design System Template
+ * 
+ * A lean, component-focused design system.
+ * Only includes what's actually needed.
+ */
+
+@layer design-system {
+  :root {
+    /* ===========================
+       COLORS
+       =========================== */
+    
+    /* Brand Colors */
+    --bp-brand-purple: #8478e0;         /* Primary brand */
+    --bp-brand-green: #71ca41;          /* Secondary brand */
+    
+    /* Text */
+    --bp-text-primary: #393f49;         
+    --bp-text-secondary: #696f8c;       
+    --bp-text-inverse: #ffffff;         
+    
+    /* Interactive */
+    --bp-interactive-primary: #eb7cff;      
+    --bp-interactive-primary-hover: #e563ff;
+    --bp-interactive-accent: #90d446;       /* Selection/highlight */
+    
+    /* Neutral */
+    --bp-neutral-border: #dad9e5;      
+    --bp-neutral-bg: #e7e6f2;          
+    
+    /* Status */
+    --bp-success: #71ca41;
+    --bp-success-bg: rgba(113, 202, 65, 0.2);
+    --bp-error: #FF5199;
+    --bp-processing: #8E38FF;
+    
+    /* Glass Effect */
+    --bp-glass-bg: rgba(255, 255, 255, 0.3);
+    --bp-glass-bg-strong: rgba(255, 255, 255, 0.6);
+    
+    /* Shadows */
+    --bp-shadow-purple: 0 0 5px 0 rgba(132, 120, 224, 0.6);
+    --bp-shadow-card: 0 0 12px 0 rgba(0, 0, 0, 0.08);
+    --bp-shadow-button-primary: 0px 4px 0px -1px #b97bc4;
+    --bp-shadow-button-secondary: 0px 3px 0px -1px #393f49;
+  }
+}
+
+/* ===========================
+   COMPONENT PATTERNS
+   =========================== */
+
+/* Glass Card Component */
+.bp-glass-card {
+  background: var(--bp-glass-bg);
+  backdrop-filter: blur(12px);
+  border: 2px solid var(--bp-neutral-border);
+  border-radius: 16px;
+  box-shadow: var(--bp-shadow-card);
+}
+
+/* Button Components */
+.bp-button {
+  /* Base button styles */
+  height: 34px;
+  padding: 0 16px;
+  border-radius: 27px;
+  font-weight: 600;
+  font-size: 14px;
+  transition: all 0.2s ease;
+  cursor: pointer;
+  border: none;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+}
+
+.bp-button-primary {
+  background: var(--bp-interactive-primary);
+  color: var(--bp-text-inverse);
+  box-shadow: var(--bp-shadow-button-primary);
+}
+
+.bp-button-primary:hover {
+  background: var(--bp-interactive-primary-hover);
+  transform: translateY(2px);
+  box-shadow: 0px 2px 0px -1px #b97bc4;
+}
+
+.bp-button-secondary {
+  background: var(--bp-neutral-bg);
+  color: var(--bp-text-primary);
+  box-shadow: var(--bp-shadow-button-secondary);
+}
+
+.bp-button-secondary:hover {
+  transform: translateY(1px);
+  box-shadow: 0px 2px 0px -1px #393f49;
+}
+
+/* Status Badge Components */
+.bp-badge {
+  padding: 4px 12px;
+  border-radius: 27px;
+  font-size: 12px;
+  font-weight: 500;
+  display: inline-block;
+}
+
+.bp-badge-success {
+  background: var(--bp-success-bg);
+  color: var(--bp-text-primary);
+}
+
+.bp-badge-error {
+  background: var(--bp-error);
+  color: var(--bp-text-inverse);
+}
+
+.bp-badge-processing {
+  background: var(--bp-processing);
+  color: var(--bp-text-inverse);
+}
+
+/* Input Component */
+.bp-input {
+  height: 44px;
+  padding: 0 12px;
+  background: rgba(255, 255, 255, 0.5);
+  backdrop-filter: blur(4px);
+  border: 1px solid #E5E7EB;
+  border-radius: 8px;
+  font-size: 14px;
+  transition: border-color 0.2s ease;
+}
+
+.bp-input:focus {
+  outline: none;
+  border-color: var(--bp-brand-purple);
+}
+
+/* Project Card Component */
+.bp-project-card {
+  background: var(--bp-glass-bg);
+  backdrop-filter: blur(12px);
+  border: 2px solid var(--bp-neutral-border);
+  border-radius: 16px;
+  padding: 16px;
+  transition: all 0.2s ease;
+}
+
+.bp-project-card:hover {
+  border-color: var(--bp-interactive-accent);
+  box-shadow: 0 0 10px 0 rgba(144, 212, 70, 0.5);
+}
+
+/* Dashboard Card Component */
+.bp-dashboard-card {
+  background: rgba(255, 255, 255, 0.99);
+  backdrop-filter: blur(12px);
+  border-radius: 16px;
+  padding: 24px;
+  box-shadow: var(--bp-shadow-card);
+}
+
+/* ===========================
+   UTILITY MIXINS (for reference)
+   =========================== */
+
+/*
+ * Glass Effect:
+ * background: var(--bp-glass-bg);
+ * backdrop-filter: blur(12px);
+ * 
+ * Button 3D Effect:
+ * box-shadow: 0px 4px 0px -1px [color];
+ * hover: transform: translateY(2px);
+ * hover: box-shadow: 0px 2px 0px -1px [color];
+ * 
+ * Card Hover:
+ * border-color: var(--bp-interactive-accent);
+ * box-shadow: var(--bp-shadow-purple);
+ */
+
+/* ===========================
+   USAGE EXAMPLES
+   =========================== */
+
+/*
+ * 1. Import this file in your component:
+ *    @import '@/styles/design-system-template.css';
+ * 
+ * 2. Use the component classes:
+ *    <div className="bp-glass-card">...</div>
+ *    <button className="bp-button bp-button-primary">Click me</button>
+ * 
+ * 3. Or use the CSS variables directly:
+ *    .my-custom-component {
+ *      color: var(--bp-text-primary);
+ *      background: var(--bp-glass-bg);
+ *    }
+ * 
+ * 4. With Tailwind (using arbitrary values):
+ *    className="bg-[var(--bp-brand-purple)] text-[var(--bp-text-inverse)]"
+ */

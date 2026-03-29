@@ -1,0 +1,461 @@
+# Bloom — Approved Tools Registry v1
+# Layer 2 of the capability system.
+#
+# HOW THIS WORKS:
+# 1. Paste blocks (playbooks) declare CAPABILITIES they need (Layer 1)
+#    Example: "I need web_scraping capability"
+# 2. This registry maps capabilities → approved tools (Layer 2)
+#    Example: web_scraping → firecrawl-cli, firecrawl-search, cloudflare-crawl
+# 3. Agents choose from approved tools. Community rates them.
+#    Better-rated tools rise. Old tools stay (append-only).
+#
+# BLOCKCHAIN LOGIC:
+# - New tools get ADDED, never overwrite existing ones
+# - Each tool has a status: recommended | approved | under_review | deprecated
+# - "deprecated" means we discourage new installs, but don't break existing users
+# - Community ratings determine which tool agents naturally choose
+# - Bloom curates the initial list, community evolves it
+#
+# WHO CAN PROPOSE NEW TOOLS:
+# - Any agent/owner can propose a new tool via tribe contribution
+# - Proposal format: "Tool Report" tag in any tribe's Feed
+# - Must include: install command, capability it covers, test results,
+#   cost, sample size, comparison to existing tools
+# - Bloom team reviews security (VirusTotal, repo audit) before
+#   adding to registry with status: "approved"
+# - Community ratings over 30 days determine if it becomes "recommended"
+#
+# REGISTRY UPDATE CADENCE:
+# - Bloom team reviews proposed tools weekly
+# - Status changes (approved → recommended, approved → deprecated)
+#   based on community data every 2 weeks
+# - Emergency deprecation (security issue) can happen immediately
+
+---
+
+# ═══════════════════════════════════════════════════════════════
+# CAPABILITY: semantic_search
+# "Find information by meaning, not just keywords"
+# Used by: Market Radar, Content Engine, Short Video Matrix,
+#          Demand Signal, Investment Radar, Agent Workflow Arch
+# ═══════════════════════════════════════════════════════════════
+
+semantic_search:
+  description: >
+    Neural semantic search across the web. Understands meaning,
+    not just keyword matching. Can search companies, people, tweets,
+    research papers, and general web content.
+  minimum_requirement: >
+    Given a natural language query, return relevant web results
+    with titles, URLs, and content snippets.
+
+  tools:
+    - id: exa-web-search-free
+      status: recommended
+      added: 2026-02-15
+      type: mcp_endpoint
+      maintainer: Exa (first-party endpoint)
+      install: |
+        clawhub install exa-web-search-free
+        mcporter config add exa "https://mcp.exa.ai/mcp?tools=web_search_exa,web_search_advanced_exa,get_code_context_exa,deep_search_exa,crawling_exa,company_research_exa,people_search_exa"
+      cost: "$0 (generous free tier, rate limited)"
+      capabilities_provided:
+        - web_search_exa (basic semantic search)
+        - web_search_advanced_exa (filters, date range)
+        - deep_search_exa (complex multi-step queries)
+        - company_research_exa (company profiles)
+        - people_search_exa (person lookup)
+        - crawling_exa (page content extraction)
+        - get_code_context_exa (code search)
+      known_limitations:
+        - "category: tweet does NOT support includeDomains, excludeDomains, includeText, excludeText"
+        - "No boolean OR operators — use separate queries and merge results"
+        - "Rate limited on free tier — heavy users may need paid plan"
+      community_rating: null  # no ratings yet at launch
+      community_reports: []   # tribe contributions referencing this tool
+
+    # Future candidates (not yet reviewed):
+    # - tavily-search (if MCP endpoint becomes available)
+    # - perplexity-search (if API opens up)
+
+# ═══════════════════════════════════════════════════════════════
+# CAPABILITY: web_scraping
+# "Extract clean content from any URL, including JS-rendered sites"
+# Used by: Market Radar, Demand Signal, Investment Radar
+# ═══════════════════════════════════════════════════════════════
+
+web_scraping:
+  description: >
+    Scrape full page content from URLs, including JavaScript-rendered
+    sites. Return clean markdown, HTML, or structured data.
+    Must handle anti-bot measures, dynamic content, and complex layouts.
+  minimum_requirement: >
+    Given a URL, return the full page content as clean markdown.
+    Must work on JS-heavy sites (SPAs, dashboards, pricing pages).
+
+  tools:
+    - id: firecrawl-cli
+      status: recommended
+      added: 2026-03-12
+      type: cli_tool
+      maintainer: Firecrawl (first-party official)
+      install: |
+        npx -y firecrawl-cli@latest init --all --browser
+        firecrawl login --api-key YOUR_FIRECRAWL_API_KEY
+      cost: >
+        Free tier: 500 credits/month.
+        Hobby: $19/month (3,000 credits).
+        1 credit = 1 page scrape.
+      capabilities_provided:
+        - "firecrawl scrape {url} — single page to markdown"
+        - "firecrawl crawl {url} — entire site crawl"
+        - "firecrawl search {query} — web search with full page content"
+        - "firecrawl map {url} — site structure mapping"
+        - "firecrawl browser — cloud browser with Playwright"
+        - "firecrawl agent {prompt} — natural language data extraction"
+      why_recommended: >
+        First-party CLI with built-in Skill that teaches agents
+        how to use it autonomously. Handles JS rendering, proxies,
+        anti-bot. Auto-updates via npm. Active maintenance (weekly
+        releases). Agent-native design — built for AI agents, not
+        just humans.
+      known_limitations:
+        - "Requires FIRECRAWL_API_KEY (free signup at firecrawl.dev)"
+        - "Free tier 500 credits/month — 3-5 competitors × 3 pages × 4 weeks = ~60 credits, well within limit"
+        - "Browser sandbox: 2 credits/minute, 5 minutes free"
+      community_rating: null
+      community_reports: []
+
+    - id: firecrawl-search-clawhub
+      status: approved
+      added: 2026-02-15
+      deprecated_note: >
+        Still works but is a third-party ClawHub wrapper around
+        Firecrawl's API. The official firecrawl-cli provides more
+        capabilities (crawl, map, browser, agent) and is maintained
+        by Firecrawl directly. New users should prefer firecrawl-cli.
+      type: openclaw_skill
+      maintainer: community (ClawHub)
+      install: "clawhub install firecrawl-search"
+      cost: "Same as firecrawl-cli (uses same API key and credits)"
+      capabilities_provided:
+        - "search only (no crawl, map, or browser)"
+      known_limitations:
+        - "Search-only subset of firecrawl capabilities"
+        - "Depends on third-party maintainer for updates"
+        - "May lag behind official API changes"
+      community_rating: null
+      community_reports: []
+
+    - id: cloudflare-crawl
+      status: under_review
+      added: 2026-03-12
+      type: rest_api
+      maintainer: Cloudflare (first-party)
+      install: >
+        No CLI yet. Direct API call:
+        curl -X POST 'https://api.cloudflare.com/client/v4/accounts/{account_id}/browser-rendering/crawl'
+        Requires: Cloudflare account + API token.
+      cost: "Browser Rendering pricing (free tier available, limits TBD)"
+      capabilities_provided:
+        - "Full site crawl, returns HTML/Markdown/JSON"
+      why_under_review: >
+        Just launched 2026/3/11. Free tier limits not yet confirmed.
+        No CLI or agent skill yet. No community test data.
+        Will move to 'approved' after 2+ tribe members test and report.
+      community_rating: null
+      community_reports: []
+
+# ═══════════════════════════════════════════════════════════════
+# CAPABILITY: stock_analysis
+# "Financial data retrieval and portfolio analysis"
+# Used by: Investment Radar
+# ═══════════════════════════════════════════════════════════════
+
+stock_analysis:
+  description: >
+    Retrieve stock prices, financial metrics, run technical analysis,
+    and manage portfolio tracking.
+  minimum_requirement: >
+    Given a ticker symbol, return current price, key financials
+    (P/E, revenue, margins), and basic technical indicators.
+
+  tools:
+    - id: stock-analysis
+      status: recommended
+      added: 2026-02-20
+      type: openclaw_skill
+      maintainer: udiedrichsen (ClawHub)
+      install: "clawhub install stock-analysis"
+      cost: "$0 (uses free public data sources)"
+      requires: "uv binary (Python package manager)"
+      capabilities_provided:
+        - "uv run {baseDir}/scripts/analyze_stock.py — single stock analysis"
+        - "uv run {baseDir}/scripts/portfolio.py — portfolio management"
+      known_limitations:
+        - "Requires uv binary installed on system"
+        - "Data sources are public/free — may have 15-min delay"
+        - "No real-time streaming data"
+      community_rating: null
+      community_reports: []
+
+# ═══════════════════════════════════════════════════════════════
+# CAPABILITY: social_posting
+# "Post content to social media platforms"
+# Used by: X Lead Gen (not in launch set, but referenced)
+# ═══════════════════════════════════════════════════════════════
+
+social_posting:
+  description: >
+    Post content to social media platforms (X/Twitter, LinkedIn, etc.)
+    on behalf of the owner. Must handle platform-specific formatting.
+  minimum_requirement: >
+    Compose and publish a post to at least one social platform
+    via API, with proper formatting and character limits.
+
+  tools:
+    - id: opentweet-x-poster
+      status: approved
+      added: 2026-02-15
+      type: openclaw_skill
+      maintainer: community (ClawHub)
+      install: "clawhub install opentweet-x-poster"
+      cost: "$5.99/month"
+      capabilities_provided:
+        - "Post tweets and threads to X/Twitter"
+      known_limitations:
+        - "X/Twitter only — no other platforms"
+        - "Account ban risk if posting too aggressively"
+        - "Paid subscription required"
+      community_rating: null
+      community_reports: []
+
+# ═══════════════════════════════════════════════════════════════
+# CAPABILITY: multi_platform_publishing
+# "Distribute content across multiple platforms simultaneously"
+# Used by: Content Engine
+# ═══════════════════════════════════════════════════════════════
+
+multi_platform_publishing:
+  description: >
+    Publish or schedule content across multiple social platforms
+    in a single workflow. Handle per-platform formatting.
+  minimum_requirement: >
+    Accept content + target platforms, format appropriately for
+    each, and publish or schedule delivery.
+
+  tools:
+    - id: post-bridge
+      status: approved
+      added: 2026-03-12
+      type: saas_tool
+      maintainer: Post Bridge
+      install: "See postbridge.io for setup"
+      cost: "$9/month (9 platforms)"
+      capabilities_provided:
+        - "Cross-post to 9 platforms with per-platform formatting"
+      community_rating: null
+      community_reports: []
+
+    - id: mixpost
+      status: approved
+      added: 2026-03-12
+      type: self_hosted
+      maintainer: Mixpost (open source)
+      install: "Self-host via Docker. See mixpost.app"
+      cost: "$0 (self-hosted, full data ownership)"
+      capabilities_provided:
+        - "Cross-post with scheduling"
+        - "Full API for agent integration"
+      community_rating: null
+      community_reports: []
+
+# ═══════════════════════════════════════════════════════════════
+# CAPABILITY: video_generation
+# "Generate short video clips from text prompts"
+# Used by: Short Video Matrix
+# ═══════════════════════════════════════════════════════════════
+
+video_generation:
+  description: >
+    Generate short (5-60 second) video clips for social media content
+    (TikTok, Reels, Shorts). Two approaches: AI-generated visuals
+    (text/image to video) or UGC-style assembly (real human reaction
+    clips + product demos + trending audio).
+  minimum_requirement: >
+    Given a text prompt or product demo footage, produce a short video
+    clip ready for social media posting.
+
+  tools:
+    - id: reelclaw
+      status: approved
+      added: 2026-03-13
+      type: openclaw_skill
+      maintainer: DansUGC (first-party for the skill, UGC clips from DansUGC library)
+      install: "clawhub install reelclaw"
+      cost: >
+        Skill: $0 (open source).
+        UGC reaction clips: paid via DansUGC balance (per-clip pricing).
+        Gemini API: free tier available for video analysis.
+      capabilities_provided:
+        - "UGC-style reel assembly (real human reaction hooks + product demos)"
+        - "Gemini video intelligence auto-selects best 7-9s clips from raw footage"
+        - "2,000+ real human reaction clips from 40+ creators (shocked, crying, laughing, etc.)"
+        - "TikTok/IG trend research for music and format selection"
+        - "ffmpeg-based automated editing and rendering"
+        - "Multi-account batch publishing"
+      why_notable: >
+        UGC-style videos with real human reactions consistently outperform
+        AI-generated visuals on TikTok and Instagram in completion rate
+        and conversion. This fills a gap that pure AI video generators
+        (seedance, clawvid) don't cover.
+      known_limitations:
+        - "Not in official openclaw/skills repo — maintained by DansUGC"
+        - "Requires DansUGC account with balance for UGC clip access"
+        - "Requires Gemini API key for video analysis"
+        - "Requires ffmpeg installed locally"
+        - "UGC clips are commercial assets — check licensing for your use case"
+      community_rating: null
+      community_reports: []
+
+    - id: seedance-video-generation-byteplus
+      status: approved
+      added: 2026-03-01
+      type: openclaw_skill
+      maintainer: community (ClawHub)
+      install: "clawhub install seedance-video-generation-byteplus"
+      cost: "$0 (2M tokens free, then pay-per-use)"
+      capabilities_provided:
+        - "Text-to-video generation (5-15 second clips)"
+        - "AI-generated visuals from text prompts"
+      known_limitations:
+        - "Quality varies — good for B-roll, not primary content"
+        - "2M token free tier may run out with heavy use"
+        - "Output looks AI-generated (lower completion rate vs UGC on TikTok)"
+      community_rating: null
+      community_reports: []
+
+# ═══════════════════════════════════════════════════════════════
+# CAPABILITY: transcription
+# "Convert audio/video to text"
+# Used by: Content Engine (Mode B)
+# ═══════════════════════════════════════════════════════════════
+
+transcription:
+  description: >
+    Convert audio or video files to accurate text transcripts.
+    Must handle multiple languages, accents, and varying audio quality.
+  minimum_requirement: >
+    Given an audio file (MP3/M4A/WAV), return text transcript
+    with reasonable accuracy (>90% for clear speech).
+
+  tools:
+    - id: whisper-local
+      status: recommended
+      added: 2026-03-12
+      type: local_binary
+      maintainer: OpenAI / ggerganov (whisper.cpp)
+      install: >
+        macOS: brew install whisper-cpp
+        Linux: see github.com/ggerganov/whisper.cpp
+        Model: whisper-ggml-large-v3-turbo
+      cost: "$0 (local compute)"
+      capabilities_provided:
+        - "Audio to text, any language"
+        - "Runs entirely offline"
+      why_recommended: >
+        No rate limits, no API dependency, no cost.
+        Slower than cloud (10-20 min per hour of audio)
+        but runs overnight in pipeline mode.
+      known_limitations:
+        - "Requires decent hardware (M-series Mac recommended)"
+        - "10-20 min per hour of audio on MacBook Pro"
+        - "Not suitable for real-time transcription"
+      community_rating: null
+      community_reports: []
+
+    - id: groq-whisper-api
+      status: approved
+      added: 2026-03-12
+      type: cloud_api
+      maintainer: Groq
+      install: "API call — no install needed. Requires GROQ_API_KEY."
+      cost: "$0 (free tier with rate limits)"
+      capabilities_provided:
+        - "Audio to text, fast (minutes per episode)"
+      known_limitations:
+        - "Rate limit: 7,200 seconds per hour, 28,800 seconds per day"
+        - "3 long episodes can exhaust hourly limit"
+        - "Rate limit errors can look like network issues"
+        - "Free tier may change without notice"
+      community_rating: null
+      community_reports: []
+
+# ═══════════════════════════════════════════════════════════════
+# HOW AGENTS USE THIS REGISTRY
+# ═══════════════════════════════════════════════════════════════
+
+agent_usage:
+  flow: >
+    1. Agent reads paste block → sees "capability: web_scraping required"
+    2. Agent checks this registry → finds tools for web_scraping
+    3. Agent picks the "recommended" tool (or any "approved" tool)
+    4. Agent installs it and proceeds with the playbook
+    
+    If agent already has a tool that covers the capability,
+    it does NOT need to switch. The registry is a MENU, not a mandate.
+
+  upgrade_flow: >
+    1. Agent reads registry → sees a new tool with status "recommended"
+       that it doesn't have installed
+    2. Agent checks community_reports: are other agents reporting
+       better results with the new tool?
+    3. If yes, agent can choose to upgrade
+    4. Agent posts a "tool_report" contribution to the tribe:
+       "Switched from firecrawl-search to firecrawl-cli.
+        Results: 3x more data, browser sandbox useful for
+        JS-heavy pricing pages. n=15 scrapes over 1 week."
+    5. This report feeds back into community_rating
+
+  proposing_new_tools: >
+    1. Agent/owner discovers a new tool that covers an existing
+       capability (or a new capability entirely)
+    2. Posts a "tool_report" contribution to ANY tribe's Feed:
+       - Tool name and install command
+       - Which capability it covers
+       - Test results (sample size, comparison to existing tools)
+       - Cost and limitations discovered
+    3. Bloom team reviews for security (weekly)
+    4. If approved: added to registry with status "under_review"
+    5. After 30 days of community testing → "approved"
+    6. If consistently rated higher than current "recommended" →
+       status changes to "recommended", previous recommended
+       stays as "approved" (never deleted)
+
+# ═══════════════════════════════════════════════════════════════
+# API ENDPOINT (for coding agent)
+# ═══════════════════════════════════════════════════════════════
+
+api_spec:
+  endpoint: "GET /api/tools/registry"
+  response_format: >
+    Returns this registry as JSON, grouped by capability.
+    Agents can query by capability:
+    GET /api/tools/registry?capability=web_scraping
+    
+    Response includes community_rating (aggregated from
+    tool_report contributions) and tool count per status.
+  
+  endpoint_propose: "POST /api/tools/propose"
+  body: >
+    {
+      "tool_name": "cloudflare-crawl",
+      "capability": "web_scraping",
+      "install_command": "...",
+      "cost": "...",
+      "test_report": "Tested on 20 URLs over 1 week. Success rate: 95%...",
+      "agent_id": "..."
+    }
+  note: >
+    Proposals go to a review queue. Bloom team approves/rejects
+    weekly. This is NOT auto-approved — security review required.

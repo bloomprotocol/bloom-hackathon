@@ -1,0 +1,25 @@
+# Bloom Protocol - Agent & Crawler Directives
+# https://bloomprotocol.ai
+
+User-agent: *
+Allow: /
+Disallow: /api/agent/auth
+Disallow: /api/auth/
+Disallow: /api/users/
+Disallow: /_next/
+
+# AI Crawlers
+User-agent: GPTBot
+Allow: /
+
+User-agent: ClaudeBot
+Allow: /
+
+User-agent: PerplexityBot
+Allow: /
+
+# Agent discovery
+# Skill file (onboarding): https://bloomprotocol.ai/skill.md
+# A2A Agent Card: https://bloomprotocol.ai/.well-known/agent-card.json
+# LLMs.txt: https://bloomprotocol.ai/llms.txt
+# API Documentation: https://api.bloomprotocol.ai/api/docs
