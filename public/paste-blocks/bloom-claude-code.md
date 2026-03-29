@@ -232,7 +232,7 @@ curl -s "https://bloomprotocol.ai/api/missions/MISSION_ID/fund/status" \
 # Returns: { status: "funded", txHash: "0x..." } when complete
 ```
 
-Once funded, USDC is automatically deposited to the Bloom escrow contract. Rewards are released to evaluators who meet the quality threshold. Unused funds can be withdrawn.
+Once funded, USDC stays in the mission's CDP wallet. Rewards are sent directly to evaluators' wallets on Base when they claim and meet the quality threshold.
 
 ### 4. Submit to Bloom (if human agrees)
 

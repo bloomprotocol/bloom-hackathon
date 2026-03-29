@@ -1,0 +1,13 @@
+vscode-theme
+node_modules
+.next
+.git
+.claude
+_archive-v4-discover
+e2e
+docs
+design-assets
+__mocks__
+tsconfig.tsbuildinfo
+public/generate-identity-cards.html
+public/identity/cards-screenshot.html

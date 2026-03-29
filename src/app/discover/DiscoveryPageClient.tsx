@@ -287,11 +287,8 @@ export default function DiscoveryPageClient() {
           </div>
 
           {/* Featured project: Bloom Discovery Skill */}
-          <a
-            href="https://github.com/bloomprotocol/bloom-discovery-skill"
-            target="_blank"
-            rel="noopener noreferrer"
-            className="block rounded-[16px] p-5 transition-shadow hover:shadow-md"
+          <div
+            className="rounded-[16px] p-5"
             style={{ background: 'linear-gradient(135deg, rgba(124,58,237,0.06), rgba(196,164,108,0.04))', border: '1px solid rgba(124,58,237,0.12)' }}
           >
             <div className="flex items-start justify-between mb-3">
@@ -304,12 +301,36 @@ export default function DiscoveryPageClient() {
             <p className="text-[13px] text-[#6b7280] mb-3 leading-relaxed" style={{ fontFamily: 'var(--font-dm-sans), sans-serif' }}>
               Intent-driven skill discovery — analyzes your builder personality and matches you to curated use case playbooks. Don&apos;t browse 13,000 skills. Browse use cases.
             </p>
+            {/* Mission summary */}
+            <div className="mb-3 p-3 rounded-[10px]" style={{ background: 'rgba(255,255,255,0.7)', border: '1px solid rgba(0,0,0,0.04)' }}>
+              <p className="text-[12px] font-semibold text-[#1e1b4b] mb-2" style={{ fontFamily: 'var(--font-dm-sans), sans-serif' }}>Active Missions — $0.50 USDC each</p>
+              <div className="flex flex-col gap-1.5">
+                <div className="flex items-center gap-2">
+                  <span className="text-[10px] px-1.5 py-0.5 rounded" style={{ fontFamily: 'var(--font-jetbrains-mono), monospace', background: 'rgba(124,58,237,0.08)', color: '#7c3aed' }}>Open</span>
+                  <span className="text-[11px] text-[#555]" style={{ fontFamily: 'var(--font-dm-sans), sans-serif' }}>Potential Customer — &quot;Would I use this?&quot;</span>
+                </div>
+                <div className="flex items-center gap-2">
+                  <span className="text-[10px] px-1.5 py-0.5 rounded" style={{ fontFamily: 'var(--font-jetbrains-mono), monospace', background: 'rgba(124,58,237,0.08)', color: '#7c3aed' }}>Open</span>
+                  <span className="text-[11px] text-[#555]" style={{ fontFamily: 'var(--font-dm-sans), sans-serif' }}>Industry Expert — &quot;How does this compare?&quot;</span>
+                </div>
+                <div className="flex items-center gap-2">
+                  <span className="text-[10px] px-1.5 py-0.5 rounded" style={{ fontFamily: 'var(--font-jetbrains-mono), monospace', background: 'rgba(234,179,8,0.08)', color: '#b45309' }}>Human Only</span>
+                  <span className="text-[11px] text-[#555]" style={{ fontFamily: 'var(--font-dm-sans), sans-serif' }}>Growth Advisor — &quot;How do I get this seen?&quot;</span>
+                </div>
+                <div className="flex items-center gap-2">
+                  <span className="text-[10px] px-1.5 py-0.5 rounded" style={{ fontFamily: 'var(--font-jetbrains-mono), monospace', background: 'rgba(234,179,8,0.08)', color: '#b45309' }}>Human Only</span>
+                  <span className="text-[11px] text-[#555]" style={{ fontFamily: 'var(--font-dm-sans), sans-serif' }}>Devil&apos;s Advocate — &quot;What kills this?&quot;</span>
+                </div>
+              </div>
+            </div>
             <div className="flex items-center gap-3 flex-wrap">
               <span className="text-[11px] px-2 py-1 rounded-full" style={{ fontFamily: 'var(--font-jetbrains-mono), monospace', background: 'rgba(5,150,105,0.08)', color: '#059669' }}>Published on ClawHub</span>
-              <span className="text-[11px] px-2 py-1 rounded-full" style={{ fontFamily: 'var(--font-jetbrains-mono), monospace', background: 'rgba(234,179,8,0.08)', color: '#b45309' }}>4 missions active</span>
               <span className="text-[11px] px-2 py-1 rounded-full" style={{ fontFamily: 'var(--font-jetbrains-mono), monospace', background: 'rgba(124,58,237,0.08)', color: '#7c3aed' }}>$2 USDC bounty pool</span>
+              <a href="/discover/launch" className="text-[11px] font-medium text-[#7c3aed] hover:underline ml-auto" style={{ fontFamily: 'var(--font-dm-sans), sans-serif' }}>
+                View full missions in Launch Tribe →
+              </a>
             </div>
-          </a>
+          </div>
 
           {/* Other project cards */}
           {projectsLoading ? (
