@@ -1,6 +1,7 @@
 'use client';
 
 import { useAuth } from '@/lib/context/AuthContext';
+import { useModal } from '@/lib/context/ModalContext';
 import { useUserClaims } from '@/hooks/useUserClaims';
 import AgentLanding from './AgentLanding';
 import AgentDashboard from './AgentDashboard';
@@ -178,12 +179,7 @@ export default function MyAgentClient() {
   const { isAuthenticated, isLoading: authLoading, user } = useAuth();
   const { data: claims, isLoading: claimsLoading } = useUserClaims();
   const { agentData } = useAgentSession();
-
-  // Show agent status page (identity + evolution + actions)
-  // Full dashboard only when AGENT_TAB_ENABLED=true AND user has claims
-  if (!AGENT_TAB_ENABLED) {
-    return <AgentStatusPage />;
-  }
+  const { openAuthModal } = useModal();
 
   if (authLoading) {
     return (
@@ -193,8 +189,36 @@ export default function MyAgentClient() {
     );
   }
 
-  // Wait for claims if authenticated
-  if (isAuthenticated && claimsLoading) {
+  // Not logged in → show connect prompt
+  if (!isAuthenticated) {
+    return (
+      <div className="max-w-[500px] mx-auto py-16 px-4 text-center">
+        <h1
+          className="text-2xl font-bold text-gray-900 mb-3"
+          style={{ fontFamily: 'var(--font-dm-sans), DM Sans, sans-serif' }}
+        >
+          My Agent
+        </h1>
+        <p className="text-[14px] text-gray-500 mb-8" style={{ fontFamily: 'var(--font-dm-sans), sans-serif' }}>
+          Connect to see your agent identity, reputation, and World ID status.
+        </p>
+        <button
+          onClick={() => openAuthModal()}
+          className="px-6 py-3 rounded-full text-[14px] font-semibold text-white transition-opacity hover:opacity-90"
+          style={{ fontFamily: 'var(--font-dm-sans), sans-serif', background: 'linear-gradient(135deg, #7c3aed, #6d28d9)' }}
+        >
+          Connect with Email or Wallet
+        </button>
+        <p className="text-[11px] text-gray-400 mt-4" style={{ fontFamily: 'var(--font-dm-sans), sans-serif' }}>
+          No crypto wallet needed. Email works too.
+        </p>
+      </div>
+    );
+  }
+
+  // Logged in — show agent identity page
+  // Wait for claims if loading
+  if (claimsLoading) {
     return (
       <div className="flex items-center justify-center py-20">
         <div className="w-8 h-8 border-[3px] border-gray-900 border-t-transparent rounded-full animate-spin" />
@@ -202,11 +226,11 @@ export default function MyAgentClient() {
     );
   }
 
-  // Show dashboard if user has claims OR agent identity exists
-  const hasClaims = isAuthenticated && claims && claims.length > 0;
-  if (hasClaims || agentData) {
+  // Show full dashboard if user has claims or agent data, otherwise show identity page
+  const hasClaims = claims && claims.length > 0;
+  if (AGENT_TAB_ENABLED && (hasClaims || agentData)) {
     return <AgentDashboard claims={claims ?? []} />;
   }
 
-  return <AgentLanding />;
+  return <AgentStatusPage />;
 }

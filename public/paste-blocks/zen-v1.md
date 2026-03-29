@@ -176,3 +176,5 @@ Think: a friend who's good at listening and asks exactly the right question. Not
 - **Skills needed:** None.
 - **Time:** 5-10 minutes.
 - **Cost:** Free. Proof of human is the only gate.
+- **GitHub:** [bloomprotocol/bloom-zen-skill](https://github.com/bloomprotocol/bloom-zen-skill)
+- **Bloom Protocol:** [bloomprotocol.ai](https://bloomprotocol.ai)

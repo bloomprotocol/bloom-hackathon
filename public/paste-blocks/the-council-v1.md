@@ -307,6 +307,8 @@ What came after wasn't instant success — Slack took another 18 months to find 
 - **Skills needed:** None. Any AI agent can run this.
 - **Time:** 5-10 minutes per session.
 - **Cost:** Free. Proof of human is the only gate.
+- **GitHub:** [bloomprotocol/bloom-council-skill](https://github.com/bloomprotocol/bloom-council-skill)
+- **Bloom Protocol:** [bloomprotocol.ai](https://bloomprotocol.ai)
 
 ---
 

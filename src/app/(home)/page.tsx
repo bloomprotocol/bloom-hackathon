@@ -36,8 +36,7 @@ export default async function HomePage() {
       {/* Email capture */}
       <DashboardPreviewSection />
 
-      {/* Live stats bar */}
-      <HomepageStats />
+      {/* Stats hidden — real-time data when API ready */}
 
       {/* What Makes a Tribe — 3 pillars */}
       <OpenBeta3rdScreen />
