@@ -21,7 +21,7 @@ export async function POST(req: NextRequest, { params }: { params: Promise<{ id:
     }
 
     const auth = req.headers.get('authorization') || '';
-    const res = await fetch(`${BACKEND}/missions/${id}/fund`, {
+    const res = await fetch(`${BACKEND}/tribe-missions/${id}/fund`, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json', Authorization: auth },
     });

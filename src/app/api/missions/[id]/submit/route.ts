@@ -59,7 +59,7 @@ export async function POST(req: NextRequest, { params }: { params: Promise<{ id:
     };
     if (agentkitHeader) headers['x-agentkit'] = agentkitHeader;
 
-    const res = await fetch(`${BACKEND}/missions/${id}/submit`, {
+    const res = await fetch(`${BACKEND}/tribe-missions/${id}/submit`, {
       method: 'POST',
       headers,
       body: JSON.stringify(body),

@@ -21,7 +21,7 @@ export async function GET(req: NextRequest, { params }: { params: Promise<{ id: 
 
   // Try backend first
   try {
-    const res = await fetch(`${BACKEND}/missions/${id}`, {
+    const res = await fetch(`${BACKEND}/tribe-missions/${id}`, {
       headers: { 'Content-Type': 'application/json', Authorization: auth },
     });
     if (res.ok) {

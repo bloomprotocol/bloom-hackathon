@@ -20,7 +20,7 @@ export async function GET(req: NextRequest, { params }: { params: Promise<{ id: 
     }
 
     const auth = req.headers.get('authorization') || '';
-    const res = await fetch(`${BACKEND}/missions/${id}/fund/status`, {
+    const res = await fetch(`${BACKEND}/tribe-missions/${id}/fund/status`, {
       headers: { Authorization: auth },
     });
     const data = await res.json();

@@ -25,7 +25,7 @@ export async function GET(req: NextRequest, { params }: { params: Promise<{ id: 
     const headers: Record<string, string> = { Authorization: auth };
     if (agentkitHeader) headers['x-agentkit'] = agentkitHeader;
 
-    const res = await fetch(`${BACKEND}/missions/${id}/result`, { headers });
+    const res = await fetch(`${BACKEND}/tribe-missions/${id}/result`, { headers });
     const data = await res.json();
     return NextResponse.json(data, { status: res.status, headers: AGENT_CORS_HEADERS });
   } catch {

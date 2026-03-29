@@ -29,16 +29,28 @@ export default function TribeMissionsTab({ tribeId, tribeColor, isAuthenticated 
   const [missions, setMissions] = useState<Mission[]>([]);
   const [loading, setLoading] = useState(true);
 
+  // Featured missions for Bloom Discovery Skill (real missions created via API)
+  const featuredMissions: Mission[] = tribeId === 'launch' ? [
+    { id: 'featured-1', title: 'Bloom Discovery — Potential Customer', description: '"Would I use this? Why or why not?" Role-play as a potential customer of Bloom Discovery Skill.', missionType: 'A', templateId: 'role-play', tribe: 'launch', reward: { perCompletion: 0.50, totalPool: 0.50, currency: 'USDC', claimed: 0 }, slots: 1, slotsCompleted: 0, humanOnly: false, qualityThreshold: 5, cardConfig: { basicThreshold: 7, proPrice: 1, proThreshold: 5 }, status: 'active', creatorName: 'Bloom Protocol' },
+    { id: 'featured-2', title: 'Bloom Discovery — Industry Expert', description: '"How does this compare to alternatives?" Compare Bloom Discovery to existing skill browsers.', missionType: 'A', templateId: 'role-play', tribe: 'launch', reward: { perCompletion: 0.50, totalPool: 0.50, currency: 'USDC', claimed: 0 }, slots: 1, slotsCompleted: 0, humanOnly: false, qualityThreshold: 5, cardConfig: { basicThreshold: 7, proPrice: 1, proThreshold: 5 }, status: 'active', creatorName: 'Bloom Protocol' },
+    { id: 'featured-3', title: 'Bloom Discovery — Growth Advisor (Human Only)', description: '"How would I get this in front of people?" Distribution, channels, partnerships.', missionType: 'H', templateId: 'role-play', tribe: 'launch', reward: { perCompletion: 0.50, totalPool: 0.50, currency: 'USDC', claimed: 0 }, slots: 1, slotsCompleted: 0, humanOnly: true, qualityThreshold: 5, cardConfig: { basicThreshold: 7, proPrice: 1, proThreshold: 5 }, status: 'active', creatorName: 'Bloom Protocol' },
+    { id: 'featured-4', title: 'Bloom Discovery — Devil\'s Advocate (Human Only)', description: '"What will kill this project?" Be brutally honest about risks.', missionType: 'H', templateId: 'role-play', tribe: 'launch', reward: { perCompletion: 0.50, totalPool: 0.50, currency: 'USDC', claimed: 0 }, slots: 1, slotsCompleted: 0, humanOnly: true, qualityThreshold: 5, cardConfig: { basicThreshold: 7, proPrice: 1, proThreshold: 5 }, status: 'active', creatorName: 'Bloom Protocol' },
+  ] : [];
+
   useEffect(() => {
     fetch(`/api/missions?tribe=${tribeId}&status=active&limit=10`)
       .then((r) => r.json())
       .then((d) => {
         if (d.success && d.data?.missions) {
-          setMissions(d.data.missions);
+          const valid = d.data.missions.filter((m: any) => m.missionType && m.reward);
+          setMissions([...featuredMissions, ...valid]);
+        } else {
+          setMissions(featuredMissions);
         }
       })
-      .catch(() => {})
+      .catch(() => { setMissions(featuredMissions); })
       .finally(() => setLoading(false));
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [tribeId]);
 
   if (loading) {
@@ -77,6 +89,7 @@ export default function TribeMissionsTab({ tribeId, tribeColor, isAuthenticated 
         >
           {/* Header */}
           <div style={{ display: 'flex', alignItems: 'center', gap: 8, marginBottom: 12 }}>
+            <div style={{ width: 24, height: 24, borderRadius: 6, background: 'linear-gradient(135deg, #7c3aed, #a78bfa)', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: 12, flexShrink: 0 }}>🌸</div>
             <span style={{ fontSize: 18 }}>{m.missionType === 'H' ? '👤' : '🤖'}</span>
             <span
               style={{

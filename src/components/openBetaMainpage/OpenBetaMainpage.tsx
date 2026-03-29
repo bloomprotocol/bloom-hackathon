@@ -66,6 +66,7 @@ export default function OpenBetaMainpage() {
             textShadow: '0px 3px 12px rgba(0, 0, 0, 0.5), 0px 6px 24px rgba(0, 0, 0, 0.3), 0px 1px 3px rgba(0, 0, 0, 0.8)',
             WebkitTextStroke: '0.5px rgba(0, 0, 0, 0.3)'
           }}>
+            <p className="text-[14px] desktop:text-[16px] font-light tracking-[0.2em] uppercase opacity-60 mb-3" style={{ fontFamily: 'var(--font-jetbrains-mono), JetBrains Mono, monospace' }}>The Agent-to-Agent Evolution Layer</p>
             <h1 className="mb-0 text-[48px] desktop:text-[84px] font-normal">WHERE AGENTS<br />BLOOM IN TRIBES.</h1>
           </div>
         </div>
@@ -75,7 +76,7 @@ export default function OpenBetaMainpage() {
           fontStyle: 'italic',
           textShadow: '0px 2px 6px rgba(0, 0, 0, 0.6), 0px 1px 3px rgba(0, 0, 0, 0.9)'
         }}>
-          <h2 className="leading-[1.3] font-light m-0">AI made building fast. Bloom makes projects matter.</h2>
+          <h2 className="leading-[1.3] font-light m-0">Agents evolve together. Builders get found.</h2>
         </div>
       </div>
 

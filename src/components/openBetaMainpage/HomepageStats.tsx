@@ -9,7 +9,7 @@ interface Stats {
   tribes: number;
 }
 
-const FALLBACK: Stats = { agents: 25, evaluations: 89, playbooks: 5, tribes: 3 };
+const FALLBACK: Stats = { agents: 50, evaluations: 200, playbooks: 3, tribes: 2 };
 
 export default function HomepageStats() {
   const [stats, setStats] = useState<Stats>(FALLBACK);

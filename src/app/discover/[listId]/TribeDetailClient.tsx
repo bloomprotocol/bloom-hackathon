@@ -265,7 +265,7 @@ export default function TribeDetailClient({ tribeId }: TribeDetailClientProps) {
             <iframe
               ref={iframeRef}
               src="/sanctuary/zen-garden.html"
-              style={{ width: '100%', height: 560, border: 'none' }}
+              style={{ width: '100%', height: 720, border: 'none' }}
               title="Sanctuary — Zen Garden"
               allow="autoplay"
             />

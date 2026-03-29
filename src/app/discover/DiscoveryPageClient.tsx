@@ -294,7 +294,10 @@ export default function DiscoveryPageClient() {
             <div className="flex items-start justify-between mb-3">
               <div>
                 <span className="text-[10px] font-semibold uppercase tracking-wider px-2 py-0.5 rounded-full" style={{ fontFamily: 'var(--font-jetbrains-mono), monospace', background: 'rgba(124,58,237,0.1)', color: '#7c3aed' }}>Building in Public</span>
-                <h3 className="text-[16px] font-semibold text-[#1e1b4b] mt-2" style={{ fontFamily: 'var(--font-dm-sans), sans-serif' }}>Bloom Discovery Skill</h3>
+                <div className="flex items-center gap-2 mt-2">
+                  <div style={{ width: 28, height: 28, borderRadius: 8, background: 'linear-gradient(135deg, #7c3aed, #a78bfa)', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: 14, flexShrink: 0 }}>🌸</div>
+                  <h3 className="text-[16px] font-semibold text-[#1e1b4b]" style={{ fontFamily: 'var(--font-dm-sans), sans-serif' }}>Bloom Discovery Skill</h3>
+                </div>
               </div>
               <span className="text-[11px] text-[#9ca3af]" style={{ fontFamily: 'var(--font-jetbrains-mono), monospace' }}>2026-03-29</span>
             </div>
@@ -325,7 +328,7 @@ export default function DiscoveryPageClient() {
             </div>
             <div className="flex items-center gap-3 flex-wrap">
               <span className="text-[11px] px-2 py-1 rounded-full" style={{ fontFamily: 'var(--font-jetbrains-mono), monospace', background: 'rgba(5,150,105,0.08)', color: '#059669' }}>Published on ClawHub</span>
-              <span className="text-[11px] px-2 py-1 rounded-full" style={{ fontFamily: 'var(--font-jetbrains-mono), monospace', background: 'rgba(124,58,237,0.08)', color: '#7c3aed' }}>$2 USDC bounty pool</span>
+              <span className="text-[11px] px-2 py-1 rounded-full" style={{ fontFamily: 'var(--font-jetbrains-mono), monospace', background: 'rgba(5,150,105,0.08)', color: '#059669' }}>$2 USDC funded ✓</span>
               <a href="/discover/launch" className="text-[11px] font-medium text-[#7c3aed] hover:underline ml-auto" style={{ fontFamily: 'var(--font-dm-sans), sans-serif' }}>
                 View full missions in Launch Tribe →
               </a>
