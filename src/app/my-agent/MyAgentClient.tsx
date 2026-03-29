@@ -10,12 +10,13 @@ import dynamic from 'next/dynamic';
 
 // Dynamic imports for hackathon components (client-only, no SSR)
 const WorldIdVerify = dynamic(() => import('@/components/hackathon/WorldIdVerify'), { ssr: false });
-const X402PayButton = dynamic(() => import('@/components/hackathon/X402PayButton'), { ssr: false });
+// X402PayButton removed — wallet status now comes from auth context
 
 const AGENT_TAB_ENABLED = process.env.NEXT_PUBLIC_AGENT_TAB_ENABLED === 'true';
 
 function AgentStatusPage() {
   const { user } = useAuth();
+  const { openAuthModal } = useModal();
   return (
     <div className="max-w-[600px] mx-auto py-12 px-4">
       <h1
@@ -28,20 +29,6 @@ function AgentStatusPage() {
         Your agent&apos;s identity, reputation, and evolution
       </p>
 
-      {/* Bloom Tribe Skill prompt */}
-      <div className="mb-6 p-5 rounded-2xl" style={{ background: 'linear-gradient(135deg, rgba(124,58,237,0.06), rgba(196,164,108,0.06))', border: '1px solid rgba(124,58,237,0.15)' }}>
-        <p className="text-[13px] text-gray-600 mb-2" style={{ fontFamily: 'var(--font-dm-sans), sans-serif' }}>
-          Paste this to your AI agent to get started:
-        </p>
-        <code
-          className="block text-[13px] p-3 rounded-lg cursor-pointer select-all leading-relaxed"
-          style={{ fontFamily: 'var(--font-jetbrains-mono), monospace', color: '#4c1d95', background: 'rgba(255,255,255,0.7)' }}
-          title="Click to select"
-        >
-          Read https://bloomprotocol.ai/paste-blocks/bloom-claude-code.md and help me get started with Bloom.
-        </code>
-      </div>
-
       {/* Identity Layers */}
       <div className="mb-6">
         <h2 className="text-[15px] font-semibold text-gray-800 mb-3" style={{ fontFamily: 'var(--font-dm-sans), sans-serif' }}>
@@ -49,18 +36,14 @@ function AgentStatusPage() {
         </h2>
         <div className="space-y-3">
           <IdentityRow icon="🔑" label="Registered" description="API key active" done />
-          <div className="flex items-center gap-3 p-3 rounded-xl bg-white border border-gray-100">
-            <span className="text-[18px]">💰</span>
-            <div className="flex-1">
-              <div className="text-[13px] font-medium text-gray-700" style={{ fontFamily: 'var(--font-dm-sans), sans-serif' }}>Wallet (x402)</div>
-              <div className="text-[12px] text-gray-400" style={{ fontFamily: 'var(--font-dm-sans), sans-serif' }}>Connect to send/receive USDC on Base</div>
-            </div>
-            <X402PayButton
-              endpoint="/api/playbook/world-id/status"
-              label="Connect Wallet"
-              onSuccess={() => {}}
-            />
-          </div>
+          <IdentityRow
+            icon="💰"
+            label="Wallet (Base)"
+            description={user?.walletAddress ? `${user.walletAddress.slice(0, 6)}...${user.walletAddress.slice(-4)}` : 'Connect to send/receive USDC on Base'}
+            done={!!user?.walletAddress}
+            actionLabel="Connect Wallet"
+            onAction={() => openAuthModal()}
+          />
           <div className="flex items-center gap-3 p-3 rounded-xl bg-white border border-gray-100">
             <span className="text-[18px]">🔒</span>
             <div className="flex-1">
@@ -144,8 +127,8 @@ function AgentStatusPage() {
   );
 }
 
-function IdentityRow({ icon, label, description, done, actionLabel, disabled }: {
-  icon: string; label: string; description: string; done?: boolean; actionLabel?: string; disabled?: boolean;
+function IdentityRow({ icon, label, description, done, actionLabel, disabled, onAction }: {
+  icon: string; label: string; description: string; done?: boolean; actionLabel?: string; disabled?: boolean; onAction?: () => void;
 }) {
   return (
     <div className="flex items-center gap-3 p-3 rounded-xl bg-white border border-gray-100">
@@ -159,6 +142,7 @@ function IdentityRow({ icon, label, description, done, actionLabel, disabled }: 
       ) : (
         <button
           disabled={disabled}
+          onClick={onAction}
           className="text-[11px] px-3 py-1.5 rounded-full font-medium transition-colors no-underline"
           style={{
             fontFamily: 'var(--font-jetbrains-mono), monospace',

@@ -109,7 +109,7 @@ Then say:
 - Do NOT rush the user. Let them speak.
 - Do NOT ask more than 2 clarifying questions.
 - Do NOT diagnose, label, or categorize their feelings back to them.
-- If the user shares something indicating immediate danger to themselves or others, gently suggest they reach out to a crisis helpline. Do not continue the playbook.
+- If the user shares something indicating immediate danger to themselves or others, gently suggest they reach out to a crisis helpline (Crisis Text Line: text HOME to 741741). Do not continue the playbook.
 
 ---
 

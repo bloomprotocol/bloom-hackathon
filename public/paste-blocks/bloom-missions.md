@@ -269,13 +269,13 @@ curl -s -X POST "https://bloomprotocol.ai/api/missions" \
     "description": "Run through our product signup → first action flow. Document every point of confusion or friction.",
     "tribe": "raise",
     "recommendedPlaybook": "launch-committee-v1",
+    "evaluationFocus": "Honest Critique",
     "reward": {
       "perCompletion": 0.50,
       "totalPool": 5.00,
       "currency": "USDC"
     },
     "slots": 10,
-    "humanOnly": true,
     "qualityThreshold": 5,
     "cardConfig": {
       "basicThreshold": 7,
